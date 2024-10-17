@@ -1,0 +1,14 @@
+{
+  "name": "wdd330-project",
+  "version": "1.0.0",
+  "description": "WDD330 Personal Project",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "author": "Kerri Morris",
+  "license": "ISC",
+  "dependencies": {
+    "parcel": "^2.12.0"
+  }
+}
