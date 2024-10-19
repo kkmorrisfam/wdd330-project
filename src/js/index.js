@@ -1,4 +1,4 @@
-import Calendar from "./Calendar.mjs";
+import Calendar from "./DateM.mjs";
 
 document.addEventListener('DOMContentLoaded', ()=> {
     const calendar = new Calendar();
