@@ -1,13 +1,14 @@
 {
   "name": "wdd330-project",
   "version": "1.0.0",
-  "description": "WDD330 Personal Project",  
-    "scripts": {
-      "start": "parcel index.html", 
-      "build": "parcel build index.html"
+  "description": "WDD330 Personal Project",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
   },
-  "author": "Kerri Morris <kkmorrisfam@hotmail.com>", 
+  "author": "Kerri Morris <kkmorrisfam@hotmail.com>",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "parcel": "^2.12.0"
   }
 }
