@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', ()=> {
 // console.log(dateToday.getSeconds());  //44
 
 // Replace with your actual BIN_ID and API_KEY
-const binId = "67105963ad19ca34f8b9cf6b";
-const apiKey = "$2a$10$mlDNyCpYZTMLYq6N57nb4.uwF0MLWmq5H2Y3IAZLE7FAr.9Sl69ni";
+const binId = BIN_ID;
+const apiKey = API_MASTER_KEY;
 
 function getMydata() {
     fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
@@ -32,10 +32,10 @@ function getMydata() {
         if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
         }
-        return response.json();  // Parse the JSON from the response
+        return response.json();  
     })
     .then(data => {
-        console.log(data);  // Work with the retrieved data
+        console.log(data);  
     })
     .catch(error => {
         console.error('There has been a problem with your fetch operation:', error);
