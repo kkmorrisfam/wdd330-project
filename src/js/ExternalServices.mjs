@@ -23,17 +23,12 @@ async function convertToJson(res) {
     constructor () {    
     }
   
-    async getData(category) {    //set default value for category if nothing is passed
-    try {
-    const response = await fetch(baseURL + `products/search/${category}`);   
-    const data = await convertToJson(response);
+    //getData
+    //setData
 
-    return data.Result;
-    } catch (error) {
-      console.error('Error fetching product data in getData:', error);
-    }
-
-    //init
-
-    //
+    //can I work these options into one method or do I need multiple methods?
+    //get Filtered Data By Day
+    //get Filtered Data by Day & Time
+    //get Filtered Data by Day & Client
+    
   }
