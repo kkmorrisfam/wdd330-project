@@ -1,5 +1,6 @@
 import Calendar from "./Calendar.mjs";
-// require ('dotenv').config();
+
+// require('dotenv').config();  //this causes errors in build
 
 document.addEventListener('DOMContentLoaded', ()=> {
     const calendar = new Calendar();
@@ -19,8 +20,9 @@ document.addEventListener('DOMContentLoaded', ()=> {
 // console.log(dateToday.getSeconds());  //44
 
 // Replace with your actual BIN_ID and API_KEY
-const binId = BIN_ID;
-const apiKey = API_MASTER_KEY;
+//currently works with api key, but not with variable
+const binId = process.env.BIN_ID;
+const apiKey = process.env.API_MASTER_KEY;
 
 function getMydata() {
     fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
