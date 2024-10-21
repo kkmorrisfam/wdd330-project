@@ -18,17 +18,17 @@ async function convertToJson(res) {
     }
   }
 
-  export default ExternalServices() {
-    //constructor
-    constructor () {    
-    }
+  // export default ExternalServices() { 
+  //   //constructor
+  //   constructor () {    
+  //   }
   
-    //getData
-    //setData
+  //   //getData
+  //   //setData
 
-    //can I work these options into one method or do I need multiple methods?
-    //get Filtered Data By Day
-    //get Filtered Data by Day & Time
-    //get Filtered Data by Day & Client
+  //   //can I work these options into one method or do I need multiple methods?
+  //   //get Filtered Data By Day
+  //   //get Filtered Data by Day & Time
+  //   //get Filtered Data by Day & Client
     
-  }
+  // }
