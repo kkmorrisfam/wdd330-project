@@ -65,7 +65,8 @@ export default class Calendar {
         dayElementsDOM.forEach((day) => {
             // console.log("day: " + day);
             day.addEventListener("click", (event) => {
-                const selectedDate = event.target.dataset.date;                
+                const selectedDate = event.target.dataset.date;  
+                console.log('selectedDate: ' + selectedDate);              
                 //remove the outline from the previously selected date, if there is one
                 if (previouslySelected) {
                     previouslySelected.classList.remove("selected-outline");
