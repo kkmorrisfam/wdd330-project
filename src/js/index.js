@@ -1,5 +1,7 @@
 import Calendar from "./Calendar.mjs";
 
+// require('dotenv').config();  //this is for backend
+
 document.addEventListener('DOMContentLoaded', ()=> {
     const calendar = new Calendar();
 });
@@ -18,8 +20,12 @@ document.addEventListener('DOMContentLoaded', ()=> {
 // console.log(dateToday.getSeconds());  //44
 
 // Replace with your actual BIN_ID and API_KEY
-const binId = BIN_ID;
-const apiKey = API_MASTER_KEY;
+const binId = process.env.PARCEL_BIN_ID;
+const apiKey = process.env.PARCEL_API_MASTER_KEY;
+
+console.log("binId:", binId);  // Should log the value of binId
+console.log("apiKey:", apiKey);  // Should log the value of apiKey
+
 
 function getMydata() {
     fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
