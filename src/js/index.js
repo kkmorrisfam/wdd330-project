@@ -23,9 +23,6 @@ document.addEventListener('DOMContentLoaded', ()=> {
 const binId = process.env.PARCEL_BIN_ID;
 const apiKey = process.env.PARCEL_API_MASTER_KEY;
 
-console.log("binId:", binId);  // Should log the value of binId
-console.log("apiKey:", apiKey);  // Should log the value of apiKey
-
 
 function getMydata() {
     fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
