@@ -15,18 +15,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: left;
+    /* font: var(--header-font); */
 }
 
 /* Calendar Styles */
 .container {
     display: inline-block;
     background-color: var(--clr-light-1);
-    border-radius: 30px;
+    border-radius: 15px;
     padding: 0 1em;
     margin-top: 2.1em;
 }
 
-header {
+.calendar-header {
     margin: 24px;
     display: flex;
     justify-content: space-between;
@@ -38,14 +39,13 @@ header {
 .header-display {
     display: flex;
     align-items: center;
-
 }
 
 .header-display p {
     color: var(--clr-accent-2);
     margin: 5px;
-    font-size: 1.2rem;
-    word-spacing: 0.5rem;
+    font-size: 1rem;
+    word-spacing: 0.4rem;
 }
 
 .arrow {
@@ -61,7 +61,7 @@ header {
     display: grid;
     grid-template-columns: repeat(7,1fr);
     margin: auto;
-    padding: 0 18px;
+    padding: 0 5px;
     justify-content: space-between;
 }
 
@@ -70,8 +70,8 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 3rem;
-    width: 3em;
+    height: 2rem;
+    width: 2rem;
     border-radius: 40%;
 }
 
@@ -88,7 +88,8 @@ header {
 
 .current-date {
     background-color: var(--clr-accent-2);
-    color: var(--clr-light-2);
+    /* color not working */
+    color: var(--clr-light-1); 
 
 }
 
@@ -104,3 +105,32 @@ header {
 }
 
 /* End Calendar Styles */
+
+/* Column Styles */
+/* .column {
+    display: inline-block;
+    background-color: var(--clr-light-1);
+    border-radius: 30px;
+    padding: 0 1em;
+    margin-top: 2.1em;
+    
+} */
+
+.column {
+    min-width: 255px;
+}
+
+.button {
+    font-size: 1.2rem;
+    background-color: var(--clr-light-2);
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+}
+
+li {
+    list-style-type: none;
+    padding: .1em;
+    margin: .1em;
+}
+/* End Column Styles */

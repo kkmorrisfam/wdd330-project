@@ -22,14 +22,7 @@ console.log(dateToday.getMinutes());  //38
 console.log(dateToday.getSeconds());  //44
 
 
-
-
-
 const myAPIData = new ExternalServices(binId, apiKey);
-// myAPIData.getMyData().then(data=>{console.log('Fetched Data', data)});
-// console.log('myData');
-// const myData = myAPIData.getMyData();  //still just gets a promise this way
-// console.log('myData ' + myData);
 
 myAPIData.getMyData().then(myData => {
     console.log('myData ', myData);
