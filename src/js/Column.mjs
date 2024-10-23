@@ -16,7 +16,15 @@ function renderColumnTemplate() {
         </div>`
 }
 
-//get the selected date from calendar, pass in parameter, so it can be done elsewhere
+//get the selected date from calendar, pass in parameter, so it can be used elsewhere
+export default class Column {
+    constructor(date, data) {
+        this.selectedDate = date;
+        this.dataSource = data;
+    }
+
+    
+}
 //compare selected date with api date, create array with matching values
 //create new array with filtered value of time slot, for each time an event occurs
 //dynamically create html for column with selected date and time slots into lists

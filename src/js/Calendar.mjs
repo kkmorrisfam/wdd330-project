@@ -1,3 +1,5 @@
+import { convertToDateString } from "./utils.mjs";
+
 export default class Calendar {
     constructor() {
         this.displayDOM = document.querySelector(".display");
@@ -8,6 +10,7 @@ export default class Calendar {
         this.date = new Date();
         this.year = this.date.getFullYear();
         this.month = this.date.getMonth();
+        this.selectedDate = this.date.toDateString();  //set selected date to current date initially
 
         this.init();
     }
@@ -65,9 +68,13 @@ export default class Calendar {
         dayElementsDOM.forEach((day) => {
             // console.log("day: " + day);
             day.addEventListener("click", (event) => {
+                // console.log('this.selectedDate before assignment: ', this.selectedDate);
                 const selectedDate = event.target.dataset.date;  
-                console.log('selectedDate: ' + selectedDate);              
-                //remove the outline from the previously selected date, if there is one
+                // console.log('selectedDate: ' + selectedDate);              
+                
+                this.selectedDate = selectedDate;                 
+                
+                //remove the outline from the previously selected date, if there is one                
                 if (previouslySelected) {
                     previouslySelected.classList.remove("selected-outline");
                 }
@@ -114,6 +121,11 @@ export default class Calendar {
             this.displayCalendar();
             this.displaySelected();
         });
+    }
+
+    getSelectedDate() {
+        this.selectedDate = convertToDateString(this.selectedDate);
+        return this.selectedDate;
     }
   }
   
