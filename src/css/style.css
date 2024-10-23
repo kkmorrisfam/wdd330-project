@@ -10,21 +10,30 @@
 ;
 }
 
+
 body {
     background-color: var(--clr-main);
-    display: flex;
-    align-items: center;
-    justify-content: left;
+    /* display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: left; */
+    
     /* font: var(--header-font); */
 }
 
+#main-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: left;
+}
 /* Calendar Styles */
 .container {
     display: inline-block;
     background-color: var(--clr-light-1);
     border-radius: 15px;
     padding: 0 1em;
-    margin-top: 2.1em;
+    margin: .5rem;
 }
 
 .calendar-header {
@@ -77,7 +86,7 @@ body {
 
 .days div:hover {
     background: var(--clr-accent-1);
-    color: var(--clr-accent-2);
+    color: var(--clr-light-1);
     cursor: pointer;
 
 }
@@ -118,6 +127,8 @@ body {
 
 .column {
     min-width: 255px;
+    max-height: 92vh;
+    overflow-y: auto;
 }
 
 .button {
@@ -125,12 +136,12 @@ body {
     background-color: var(--clr-light-2);
     border-radius: 10px;
     padding: 1em;
-    margin: 1em;
+    margin: .5em;
 }
 
 li {
     list-style-type: none;
-    padding: .1em;
-    margin: .1em;
+    /* padding: .1em;
+    margin: .1em; */
 }
 /* End Column Styles */
