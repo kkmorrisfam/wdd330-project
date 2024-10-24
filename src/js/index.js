@@ -10,14 +10,15 @@ const baseURL=process.env.PARCEL_URL;
 //load calendar on screen load
 document.addEventListener('DOMContentLoaded', ()=> {
     const calendar = new Calendar();
-    //what should selectedDate be?
-    // let selectedDate = ;
+    let dateToday = new Date(); 
+    let selectedDate = dateToday;    
     const storedDataByDay = getLocalStorage('filtered-by-day');    
     // console.log('storedDataByDate: ', storedDataByDay);
     // if (storedDataByDay === undefined || storedDataByDay === null) storedDataByDay = [];
     
+    //if there's a date in local storage, then load the first column with that date
     if (storedDataByDay){
-        const selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
+        selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
         // console.log('Loaded data from Local Storage:', storedDataByDay);
         const column = new Column(storedDataByDay, selectedDate);
         column.renderColumnOne();
