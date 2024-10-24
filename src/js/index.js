@@ -14,13 +14,13 @@ document.addEventListener('DOMContentLoaded', ()=> {
     // let selectedDate = dateToday;    
     const storedDataByDay = getLocalStorage('filtered-by-day') || null;
     // const storedDataByDay = getLocalStorage('filtered-by-day');    
-    // console.log('storedDataByDate: ', storedDataByDay);
+    console.log('storedDataByDate: ', storedDataByDay);
     // if (storedDataByDay === undefined || storedDataByDay === null) storedDataByDay = [];
     
     //if there's a date in local storage, then load the first column with that date
     if (storedDataByDay && storedDataByDay.length > 0){
         const selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
-        // console.log('Loaded data from Local Storage:', storedDataByDay);
+        console.log('Loaded data from Local Storage:', storedDataByDay);
         const column = new Column(storedDataByDay, selectedDate);
         column.renderColumnOne();
         }
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     document.querySelector('.days').addEventListener('click', () => {
         const selectedDate = calendar.getSelectedDate();  // Get the selected date
         if (selectedDate) {
-            // console.log('Selected date:', selectedDate);  // Log it when a date is clicked
+            console.log('Selected date:', selectedDate);  // Log it when a date is clicked
             //get new updated data with click.  Is here where I want this?
             const myfilteredData = new ExternalServices(baseURL, binId, apiKey);
             myfilteredData.getFilteredDataByDay(selectedDate)
