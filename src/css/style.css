@@ -3,22 +3,34 @@
     --clr-light-2: #D8DFDC;
     --clr-accent-1: #CF5C36;
     --clr-dark-1: #1F0812;
+    --clr-dark-2: #011a3c;
     --clr-accent-2:  #385F71;
-    --clr-main: #484d4b;
+    --clr-medium: #484d4b;
 
-    --header-font: 'Roboto', 'san-serif';
-;
+    --header-font: "Noto Serif", serif;
+    --paragraph-font: 'Roboto', 'san-serif';
+
+    --background-color-1: var(--clr-medium);
+    --background-color-2: var(--clr-light-2);
+    --background-color-3: var(--clr-light-1);
+    --header-color: var(--clr-accent-2);
+    --text-color: var(--clr-dark-1);
+
+}
+
+.dark-mode {
+    --background-color-1: var(--clr-dark-1);
+    --background-color-2: var(--clr-dark-2);
+    --background-color-3: var(--clr-medium);
+    --header-color: var(--clr-light-2);
+    --text-color: var(--clr-light-1);
 }
 
 
 body {
-    background-color: var(--clr-main);
-    /* display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: left; */
-    
-    /* font: var(--header-font); */
+    background-color: var(--background-color-1);
+    color: var(--text-color);
+    font-family: var(--paragraph-font);
 }
 
 #main-container {
@@ -30,7 +42,7 @@ body {
 /* Calendar Styles */
 .container {
     display: inline-block;
-    background-color: var(--clr-light-1);
+    background-color: var(--background-color-3);
     border-radius: 15px;
     padding: 0 1em;
     margin: .5rem;
@@ -51,7 +63,7 @@ body {
 }
 
 .header-display p {
-    color: var(--clr-accent-2);
+    color: var(--header-color);
     margin: 5px;
     font-size: 1rem;
     word-spacing: 0.4rem;
@@ -86,7 +98,7 @@ body {
 
 .days div:hover {
     background: var(--clr-accent-1);
-    color: var(--clr-light-1);
+    color: var(--text-color);
     cursor: pointer;
 
 }
@@ -116,24 +128,16 @@ body {
 /* End Calendar Styles */
 
 /* Column Styles */
-/* .column {
-    display: inline-block;
-    background-color: var(--clr-light-1);
-    border-radius: 30px;
-    padding: 0 1em;
-    margin-top: 2.1em;
-    
-} */
 
 .column {
     min-width: 255px;
-    max-height: 92vh;
+    max-height: calc(100vh - 180px);
     overflow-y: auto;
 }
 
 .button {
     font-size: 1.2rem;
-    background-color: var(--clr-light-2);
+    background-color: var(--background-color-2);
     border-radius: 10px;
     padding: 1em;
     margin: .5em;

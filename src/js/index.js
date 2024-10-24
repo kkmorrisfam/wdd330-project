@@ -2,6 +2,8 @@ import Calendar from "./Calendar.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 import Column from "./Column.mjs";
+import { addHeaderFooter } from "./headerFooter.mjs";
+import { darkMode } from "./darkMode.mjs";
 
 const binId = process.env.PARCEL_BIN_ID;
 const apiKey = process.env.PARCEL_API_MASTER_KEY;
@@ -10,9 +12,9 @@ const baseURL=process.env.PARCEL_URL;
 //load calendar on screen load
 document.addEventListener('DOMContentLoaded', ()=> {
     const calendar = new Calendar();
-    // let dateToday = new Date(); 
-    // let selectedDate = dateToday;    
-
+    addHeaderFooter();
+    darkMode();
+    
     //get local storage if there is anything there.
     const storedDataByDay = getLocalStorage('filtered-by-day') || null;
     
@@ -47,6 +49,8 @@ document.addEventListener('DOMContentLoaded', ()=> {
     });
 });  //end of eventListener on initial load
 
+
+// document.addEventListener('DOM')
 
 //get data test
 // const myAPIData = new ExternalServices(baseURL, binId, apiKey);
