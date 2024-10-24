@@ -30,7 +30,7 @@
 body {
     background-color: var(--background-color-1);
     color: var(--text-color);
-    font: var(--paragraph-font);
+    font-family: var(--paragraph-font);
 }
 
 #main-container {
@@ -128,18 +128,10 @@ body {
 /* End Calendar Styles */
 
 /* Column Styles */
-/* .column {
-    display: inline-block;
-    background-color: var(--clr-light-1);
-    border-radius: 30px;
-    padding: 0 1em;
-    margin-top: 2.1em;
-    
-} */
 
 .column {
     min-width: 255px;
-    max-height: 92vh;
+    max-height: calc(100vh - 180px);
     overflow-y: auto;
 }
 
