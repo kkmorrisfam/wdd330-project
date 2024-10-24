@@ -1,6 +1,7 @@
 import Calendar from "./Calendar.mjs";
 import ExternalServices from "./ExternalServices.mjs";
-
+import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import Column from "./Column.mjs";
 
 const binId = process.env.PARCEL_BIN_ID;
 const apiKey = process.env.PARCEL_API_MASTER_KEY;
@@ -8,19 +9,32 @@ const baseURL=process.env.PARCEL_URL;
 
 //load calendar on screen load
 document.addEventListener('DOMContentLoaded', ()=> {
+    const storedDataByDay = getLocalStorage('filtered-by-day');    
     const calendar = new Calendar();
-    // const selectedDate = calendar.getSelectedDate();
-    // console.log('Selected date:', selectedDate);    
+    // if (storedDataByDay === undefined || storedDataByDay === null) storedDataByDay = [];
+    
+    if (storedDataByDay){
+        const selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
+        const column = new Column(storedDataByDay, selectedDate);
+        }
+        
+    
     document.querySelector('.days').addEventListener('click', () => {
         const selectedDate = calendar.getSelectedDate();  // Get the selected date
         if (selectedDate) {
             console.log('Selected date:', selectedDate);  // Log it when a date is clicked
-            //get new updated data with click.  Is there where I want this?
+            //get new updated data with click.  Is here where I want this?
             const myfilteredData = new ExternalServices(baseURL, binId, apiKey);
-            myfilteredData.getFilteredDataByDay(selectedDate).then(filteredData=> {console.log('Filtered Data: ', filteredData)});
+            myfilteredData.getFilteredDataByDay(selectedDate)
+            .then(filteredData=> {
+                console.log('Filtered Data: ', filteredData);
+                setLocalStorage('filtered-by-day', filteredData);
+                const columnOne = new Column(filteredData, selectedDate);
+                columnOne.renderColumnOne();
+            });
         }
     });
-});
+});  //end of eventListener
 
 
 

@@ -31,8 +31,9 @@ export function convertToDateString(selectedDate) {
   const dateObj = new Date(selectedDate);  // Convert the string into a Date object
 
   // Get the month, day, and year from the Date object
-  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
-  const day = dateObj.getDate().toString().padStart(2, '0');           // Ensure day is always two digits
+  const month = (dateObj.getMonth() + 1);
+  //const day = dateObj.getDate().toString().padStart(2, '0');   
+  const day = dateObj.getDate();          
   const year = dateObj.getFullYear();                                  // Get the full year
   
   // Return the date in MM/DD/YYYY format
