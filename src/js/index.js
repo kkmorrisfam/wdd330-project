@@ -10,7 +10,7 @@ const baseURL=process.env.PARCEL_URL;
 //load calendar on screen load
 document.addEventListener('DOMContentLoaded', ()=> {
     const calendar = new Calendar();
-    let dateToday = new Date(); 
+    // let dateToday = new Date(); 
     // let selectedDate = dateToday;    
     const storedDataByDay = getLocalStorage('filtered-by-day') || null;
     // const storedDataByDay = getLocalStorage('filtered-by-day');    
