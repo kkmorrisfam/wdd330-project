@@ -11,7 +11,7 @@ const baseURL=process.env.PARCEL_URL;
 document.addEventListener('DOMContentLoaded', ()=> {
     const calendar = new Calendar();
     let dateToday = new Date(); 
-    let selectedDate = dateToday;    
+    // let selectedDate = dateToday;    
     const storedDataByDay = getLocalStorage('filtered-by-day') || null;
     // const storedDataByDay = getLocalStorage('filtered-by-day');    
     // console.log('storedDataByDate: ', storedDataByDay);
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     
     //if there's a date in local storage, then load the first column with that date
     if (storedDataByDay && storedDataByDay.length > 0){
-        selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
+        const selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
         // console.log('Loaded data from Local Storage:', storedDataByDay);
         const column = new Column(storedDataByDay, selectedDate);
         column.renderColumnOne();
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
         
     
     document.querySelector('.days').addEventListener('click', () => {
-        selectedDate = calendar.getSelectedDate();  // Get the selected date
+        const selectedDate = calendar.getSelectedDate();  // Get the selected date
         if (selectedDate) {
             // console.log('Selected date:', selectedDate);  // Log it when a date is clicked
             //get new updated data with click.  Is here where I want this?
