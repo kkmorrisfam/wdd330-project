@@ -1,7 +1,8 @@
 // retrieve data from localstorage
 export function getLocalStorage(key) {
   const item = localStorage.getItem(key);
-  return JSON.parse(localStorage.getItem(key));
+  // return JSON.parse(localStorage.getItem(key));
+  return (item !== null && item !== undefined) ? JSON.parse(item) : null;
 }
 
   
