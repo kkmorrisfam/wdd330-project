@@ -6,19 +6,15 @@
     --clr-accent-2:  #385F71;
     --clr-main: #484d4b;
 
-    --header-font: 'Roboto', 'san-serif';
-;
+    --header-font: "Noto Serif", serif;
+    --paragraph-font: 'Roboto', 'san-serif';
+
 }
 
 
 body {
     background-color: var(--clr-main);
-    /* display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: left; */
-    
-    /* font: var(--header-font); */
+    font: var(--paragraph-font);
 }
 
 #main-container {
