@@ -31,7 +31,7 @@ export default class ExternalServices {
 
   
   async getMyData() {
-    // const response = await fetch(`https://api.jsonbin.io/v3/b/${this.binId}/latest`, {
+    
     const response = await fetch(this.baseURL + `${this.binId}/latest`, {  
       method: "GET",
       headers: {

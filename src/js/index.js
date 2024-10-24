@@ -33,8 +33,9 @@ document.addEventListener('DOMContentLoaded', ()=> {
         if (selectedDate) {
             console.log('Selected date:', selectedDate);  // Log it when a date is clicked
             //get new updated data with click.  Is here where I want this?
+            console.log('baseURL, binId, apiKey: ', baseURL, binId, apiKey);
             const myfilteredData = new ExternalServices(baseURL, binId, apiKey);
-            console.log('myfilteredData: ', myfilteredData);
+            console.log('myfilteredData2: ', myfilteredData);
             myfilteredData.getFilteredDataByDay(selectedDate)
             .then(filteredData=> {
                 console.log('Filtered Data in index: ', filteredData);
