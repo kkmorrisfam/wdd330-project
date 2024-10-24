@@ -1,10 +1,23 @@
 // retrieve data from localstorage
+// export function getLocalStorage(key) {
+//   const item = localStorage.getItem(key);
+//   // return JSON.parse(localStorage.getItem(key));
+//   return (item !== null && item !== undefined) ? JSON.parse(item) : null;
+// }
 export function getLocalStorage(key) {
   const item = localStorage.getItem(key);
-  // return JSON.parse(localStorage.getItem(key));
-  return (item !== null && item !== undefined) ? JSON.parse(item) : null;
+  // Check for both null and the string "undefined"
+  // netlify build doesn't like "undefined", but with local build it's ok
+  if (item === null || item === "undefined") {
+      return null;
+  }
+  try {
+      return JSON.parse(item);
+  } catch (error) {
+      console.error(`Error parsing JSON for key: ${key}`, error);
+      return null; // If parsing fails, return null
+  }
 }
-
   
   // save data to local storage
 export function setLocalStorage(key, data) {
