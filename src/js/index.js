@@ -12,8 +12,10 @@ document.addEventListener('DOMContentLoaded', ()=> {
     const calendar = new Calendar();
     // let dateToday = new Date(); 
     // let selectedDate = dateToday;    
+
+    //get local storage if there is anything there.
     const storedDataByDay = getLocalStorage('filtered-by-day') || null;
-    // const storedDataByDay = getLocalStorage('filtered-by-day');    
+    
     console.log('storedDataByDate: ', storedDataByDay);
     // if (storedDataByDay === undefined || storedDataByDay === null) storedDataByDay = [];
     
@@ -32,9 +34,10 @@ document.addEventListener('DOMContentLoaded', ()=> {
             console.log('Selected date:', selectedDate);  // Log it when a date is clicked
             //get new updated data with click.  Is here where I want this?
             const myfilteredData = new ExternalServices(baseURL, binId, apiKey);
+            console.log('myfilteredData: ', myfilteredData);
             myfilteredData.getFilteredDataByDay(selectedDate)
             .then(filteredData=> {
-                // console.log('Filtered Data: ', filteredData);
+                console.log('Filtered Data in index: ', filteredData);
                 setLocalStorage('filtered-by-day', filteredData);
                 const columnOne = new Column(filteredData, selectedDate);
                 columnOne.renderColumnOne();
