@@ -12,12 +12,13 @@ document.addEventListener('DOMContentLoaded', ()=> {
     const calendar = new Calendar();
     let dateToday = new Date(); 
     let selectedDate = dateToday;    
-    const storedDataByDay = getLocalStorage('filtered-by-day');    
+    const storedDataByDay = getLocalStorage('filtered-by-day') || null;
+    // const storedDataByDay = getLocalStorage('filtered-by-day');    
     // console.log('storedDataByDate: ', storedDataByDay);
     // if (storedDataByDay === undefined || storedDataByDay === null) storedDataByDay = [];
     
     //if there's a date in local storage, then load the first column with that date
-    if (storedDataByDay){
+    if (storedDataByDay && storedDataByDay.length > 0){
         selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
         // console.log('Loaded data from Local Storage:', storedDataByDay);
         const column = new Column(storedDataByDay, selectedDate);
