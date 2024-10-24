@@ -1,4 +1,4 @@
-// import { isSameDate } from "./utils.mjs";
+import { convertTo24Hour } from "./utils.mjs";
 
 //probably won't use this, but leave it for structure
 function renderColumnTemplate() {
@@ -22,13 +22,25 @@ export default class Column {
         this.dataSource = data;
     }
 
+    // getUniqueTimes() {
+    //     return this.dataSource.reduce((timesArray, item) => {
+    //       if (!timesArray.includes(item.Time)  && (item.Time !='')) {
+    //         timesArray.push(item.Time); // Add only if the time is not already in the timesArray
+    //       }
+    //       return timesArray;
+    //     }, [])  // Start with an empty array
+    //     .sort((a, b) => this.convertTo24Hour(a).localeCompare(this.convertTo24Hour(b)));; //sort list based on time
+    //   }
+
     getUniqueTimes() {
-        return this.dataSource.reduce((timesArray, item) => {
-          if (!timesArray.includes(item.Time)) {
-            timesArray.push(item.Time); // Add only if the time is not already in the timesArray
-          }
-          return timesArray;
-        }, []); // Start with an empty array
+        return this.dataSource
+          .reduce((timesArray, item) => {
+            if (!timesArray.includes(item.Time) && item.Time !== '') {
+              timesArray.push(item.Time); // Add only if the time is not already in the timesArray
+            }
+            return timesArray;
+          }, [])
+          .sort((a, b) => convertTo24Hour(a).localeCompare(convertTo24Hour(b))); // Sort by 24-hour format
       }
 
     dateButtonTemplate() {
@@ -36,16 +48,15 @@ export default class Column {
     }
 
     timeListTemplate() {
-        const timesList = this.getUniqueTimes();
+        const timesList = this.getUniqueTimes();   
+        
         return `
         <ul class="time-group">
         ${timesList.map(time=>`<li class="button">${time}</li>`).join('')}
         </ul>`;
     }
     
-    renderColumnOne() {
-        console.log('renderColumnOne, dataSource: ', this.dataSource);
-        console.log('renderColumnOne, selectedDate: ', this.selectedDate);
+    renderColumnOne() {        
         const dateButtonHTML = this.dateButtonTemplate();
         const timeListHTML = this.timeListTemplate();
         const columnOneDOM = document.getElementById('column-day');

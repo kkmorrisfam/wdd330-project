@@ -58,8 +58,8 @@ export default class ExternalServices {
       });
       const myData = await response.json();
       const formattedDate = convertToDateString(selectedDate);
-      //const filteredData = myData.record.filter(item => item.When && item.When === formattedDate);
       const filteredData = myData.record.filter(item=> item.When && item.When === formattedDate);
+      // console.log('filteredData: ', filteredData);
       return filteredData;
     } catch (error) {
       console.error('Error fetching or filtering data:', error);

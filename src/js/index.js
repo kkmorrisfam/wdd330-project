@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', ()=> {
     //what should selectedDate be?
     // let selectedDate = ;
     const storedDataByDay = getLocalStorage('filtered-by-day');    
-    console.log('storedDataByDate: ', storedDataByDay);
+    // console.log('storedDataByDate: ', storedDataByDay);
     // if (storedDataByDay === undefined || storedDataByDay === null) storedDataByDay = [];
     
     if (storedDataByDay){
         const selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
-        console.log('Loaded data from Local Storage:', storedDataByDay);
+        // console.log('Loaded data from Local Storage:', storedDataByDay);
         const column = new Column(storedDataByDay, selectedDate);
         column.renderColumnOne();
         }
@@ -27,12 +27,12 @@ document.addEventListener('DOMContentLoaded', ()=> {
     document.querySelector('.days').addEventListener('click', () => {
         selectedDate = calendar.getSelectedDate();  // Get the selected date
         if (selectedDate) {
-            console.log('Selected date:', selectedDate);  // Log it when a date is clicked
+            // console.log('Selected date:', selectedDate);  // Log it when a date is clicked
             //get new updated data with click.  Is here where I want this?
             const myfilteredData = new ExternalServices(baseURL, binId, apiKey);
             myfilteredData.getFilteredDataByDay(selectedDate)
             .then(filteredData=> {
-                console.log('Filtered Data: ', filteredData);
+                // console.log('Filtered Data: ', filteredData);
                 setLocalStorage('filtered-by-day', filteredData);
                 const columnOne = new Column(filteredData, selectedDate);
                 columnOne.renderColumnOne();
@@ -42,18 +42,12 @@ document.addEventListener('DOMContentLoaded', ()=> {
 });  //end of eventListener on initial load
 
 
-
-
-
-
-
-
 //get data test
-const myAPIData = new ExternalServices(baseURL, binId, apiKey);
+// const myAPIData = new ExternalServices(baseURL, binId, apiKey);
 
-myAPIData.getMyData().then(myData => {
-    console.log('myData ', myData);
-});
+// myAPIData.getMyData().then(myData => {
+//     console.log('myData ', myData);
+// });
 
 
 

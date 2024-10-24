@@ -38,3 +38,20 @@ export function convertToDateString(selectedDate) {
   // Return the date in MM/DD/YYYY format
   return `${month}/${day}/${year}`;
 }
+
+// convert 12-hour time to 24-hour time for sorting
+// got help with this one.
+export function convertTo24Hour(timeStr) {
+  const [time, modifier] = timeStr.toLowerCase().split(/(a|p)/); // Split into time and AM/PM
+  let [hours, minutes] = time.split(':').map(Number);
+
+  if (modifier === 'p' && hours !== 12) {
+    hours += 12; // Convert PM to 24-hour time, except for 12 PM
+  }
+  if (modifier === 'a' && hours === 12) {
+    hours = 0; // Convert 12 AM to 00:00 in 24-hour time
+  }
+
+  // Format the result into "HH:mm" format
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+}
