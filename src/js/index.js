@@ -9,18 +9,23 @@ const baseURL=process.env.PARCEL_URL;
 
 //load calendar on screen load
 document.addEventListener('DOMContentLoaded', ()=> {
-    const storedDataByDay = getLocalStorage('filtered-by-day');    
     const calendar = new Calendar();
+    //what should selectedDate be?
+    // let selectedDate = ;
+    const storedDataByDay = getLocalStorage('filtered-by-day');    
+    console.log('storedDataByDate: ', storedDataByDay);
     // if (storedDataByDay === undefined || storedDataByDay === null) storedDataByDay = [];
     
     if (storedDataByDay){
         const selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
+        console.log('Loaded data from Local Storage:', storedDataByDay);
         const column = new Column(storedDataByDay, selectedDate);
+        column.renderColumnOne();
         }
         
     
     document.querySelector('.days').addEventListener('click', () => {
-        const selectedDate = calendar.getSelectedDate();  // Get the selected date
+        selectedDate = calendar.getSelectedDate();  // Get the selected date
         if (selectedDate) {
             console.log('Selected date:', selectedDate);  // Log it when a date is clicked
             //get new updated data with click.  Is here where I want this?
@@ -34,7 +39,9 @@ document.addEventListener('DOMContentLoaded', ()=> {
             });
         }
     });
-});  //end of eventListener
+});  //end of eventListener on initial load
+
+
 
 
 
