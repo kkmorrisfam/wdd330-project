@@ -48,14 +48,21 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
         //test 
         const newAPICall = new ExternalServices(baseURL, binId, apiKey);
-        const newArray = newAPICall.getDataByTime(selectedDate, '9:00a');
-        console.log('newAPICall: ', newArray);
+        console.log('selectedDate before getDataByTime called: ', selectedDate);
+        newAPICall.getDataByTime(selectedDate, '9:00a')
+            .then(newArray => {
+                console.log('newAPICall1: ', newArray);     //returns the array of json data   
+            })
+            .catch(error => {
+                console.error('Error fetching data by time:', error);
+            });
+        // console.log('newAPICall2: ', newArray); //still returns promise, but fulfilled, not array
 
     });
 });  //end of eventListener on initial load
 
-const newAPICall = new ExternalServices(baseURL, binId, apiKey);
-const newArray = newAPICall.getDataByTime()
+// const newAPICall = new ExternalServices(baseURL, binId, apiKey);
+// const newArray = newAPICall.getDataByTime()
 
 // document.addEventListener('DOM')
 

@@ -66,14 +66,11 @@ export default class ExternalServices {
     }
   }
 
-  //?jsonPath=${encodeURIComponent(jsonPath)
-  async getDataByTime(selectedDate = '10/14/2024', selectedTime = '9:00a') {
+  
+  async getDataByTime(selectedDate, selectedTime = '9:00a') {
     try {
       console.log('inside getDataByTime', selectedDate, selectedTime);
-      // const jsonPath = `$.record[?(@.When == '${selectedDate}'${selectedTime ? ` && @.Time == '${selectedTime}'` : ''})]`;
-      // const jsonPath = "$.record[?(@.When == '10/14/2024')]";
       const jsonPath = `$[?(@.When == '${selectedDate}'${selectedTime ? ` && @.Time == '${selectedTime}'` : ''})]`;
-
       const response = await fetch(this.baseURL + `${this.binId}/latest?meta=false`, {
         method: "GET",
         headers: {
@@ -85,7 +82,7 @@ export default class ExternalServices {
       const myData = await response.json();
       console.log('myData in getDataByTime', myData);      
       // Convert selected date to the format used in the JSON data
-      const formattedDate = convertToDateString(selectedDate);
+      // const formattedDate = convertToDateString(selectedDate);
       
       // Filter the data by the selected date
       // let filteredData = myData.record.filter(item => item.When && item.When === formattedDate);
@@ -98,7 +95,7 @@ export default class ExternalServices {
       // Return the filtered data
       // console.log('Filtered Data by Date and Time:', filteredData);
       // return filteredData;
-      // return myData;
+      return myData;
     } catch (error) {
         console.error('Error fetching or filtering data by date and time:', error);
         return [];
