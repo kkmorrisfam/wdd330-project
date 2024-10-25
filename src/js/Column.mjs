@@ -22,16 +22,6 @@ export default class Column {
         this.dataSource = data;
     }
 
-    // getUniqueTimes() {
-    //     return this.dataSource.reduce((timesArray, item) => {
-    //       if (!timesArray.includes(item.Time)  && (item.Time !='')) {
-    //         timesArray.push(item.Time); // Add only if the time is not already in the timesArray
-    //       }
-    //       return timesArray;
-    //     }, [])  // Start with an empty array
-    //     .sort((a, b) => this.convertTo24Hour(a).localeCompare(this.convertTo24Hour(b)));; //sort list based on time
-    //   }
-
     getUniqueTimes() {
         return this.dataSource
           .reduce((timesArray, item) => {
@@ -52,7 +42,7 @@ export default class Column {
         
         return `
         <ul class="time-group">
-        ${timesList.map(time=>`<li class="button">${time}</li>`).join('')}
+        ${timesList.map(time=>`<li class="button time">${time}</li>`).join('')}
         </ul>`;
     }
     

@@ -34,21 +34,28 @@ document.addEventListener('DOMContentLoaded', ()=> {
         const selectedDate = calendar.getSelectedDate();  // Get the selected date
         if (selectedDate) {
             console.log('Selected date:', selectedDate);  // Log it when a date is clicked
-            //get new updated data with click.  Is here where I want this?
-            // console.log('baseURL, binId, apiKey: ', baseURL, binId, apiKey);
-            const myfilteredData = new ExternalServices(baseURL, binId, apiKey);
-            // console.log('myfilteredData2: ', myfilteredData);
-            myfilteredData.getFilteredDataByDay(selectedDate)
+            //get new updated data with click.  Is here where I want this?           
+            const myfilteredData = new ExternalServices(baseURL, binId, apiKey);            
+            myfilteredData.getFilteredDataByDay(selectedDate)            
             .then(filteredData=> {
                 console.log('Filtered Data in index: ', filteredData);
                 setLocalStorage('filtered-by-day', filteredData);
                 const columnOne = new Column(filteredData, selectedDate);
+                console.log('selectedDate after creating columnOne: ', selectedDate)
                 columnOne.renderColumnOne();
             });
         }
+
+        //test 
+        const newAPICall = new ExternalServices(baseURL, binId, apiKey);
+        const newArray = newAPICall.getDataByTime(selectedDate, '9:00a');
+        console.log('newAPICall: ', newArray);
+
     });
 });  //end of eventListener on initial load
 
+const newAPICall = new ExternalServices(baseURL, binId, apiKey);
+const newArray = newAPICall.getDataByTime()
 
 // document.addEventListener('DOM')
 
