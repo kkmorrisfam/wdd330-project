@@ -1,25 +1,12 @@
 import { convertTo24Hour } from "./utils.mjs";
-
-//probably won't use this, but leave it for structure
-function renderColumnTemplate() {
-    return `<div class="container column day">
-            <!-- <div class="day"></div> -->
-                <div class="button selectedDay">selected date goes here</div>
-                <ul class="time-group">
-                    <li class="button">filtered time slot</li>
-                    <li class="button">filtered time slot</li>
-                    <li class="button">filtered time slot</li>
-                </ul>
-                </div>
-            </div>
-        </div>`
-}
+import ExternalServices from "./ExternalServices.mjs";
 
 //get the selected date from calendar, pass in parameter, so it can be used elsewhere
 export default class Column {
     constructor(data, date) {
         this.selectedDate = date;
         this.dataSource = data;
+        this.timeDataSource = [];
     }
 
     getUniqueTimes() {
@@ -28,6 +15,7 @@ export default class Column {
             if (!timesArray.includes(item.Time) && item.Time !== '') {
               timesArray.push(item.Time); // Add only if the time is not already in the timesArray
             }
+            this.timeDataSource = timesArray;
             return timesArray;
           }, [])
           .sort((a, b) => convertTo24Hour(a).localeCompare(convertTo24Hour(b))); // Sort by 24-hour format
@@ -42,8 +30,20 @@ export default class Column {
         
         return `
         <ul class="time-group">
-        ${timesList.map(time=>`<li class="button time">${time}</li>`).join('')}
+        ${timesList.map(time=>`<li class="button time" data-time="${time}">${time}</li>`).join('')}
         </ul>`;
+    }
+
+    oneTimeTemplate(time) {
+        return `<div class="button time">${time}</div>`;
+    }
+
+    clientListByTimeTemplate(data) {
+        // console.log('this.timeDataSource: ', this.timeDataSource);
+        return `
+        <ul class="client-list">                
+            ${data.map(client => `<li class="button client-name">${client['Linked Name']}</li>`).join('')}
+        </ul>`
     }
     
     renderColumnOne() {        
@@ -51,9 +51,48 @@ export default class Column {
         const timeListHTML = this.timeListTemplate();
         const columnOneDOM = document.getElementById('column-day');
         columnOneDOM.innerHTML = dateButtonHTML + timeListHTML;
+        console.log('inside renderColumnOne: ', this.selectedDate, this.dataSource, this.timeDataSource);
+        this.attachTimeListeners();
 
     }
-}
-//compare selected date with api date, create array with matching values
-//create new array with filtered value of time slot, for each time an event occurs
-//dynamically create html for column with selected date and time slots into lists
+
+    attachTimeListeners() {
+        console.log('begin attachTimeListeners');
+        const timeButtonsDOM = document.querySelectorAll('.button.time');
+        timeButtonsDOM.forEach(button => {
+            button.addEventListener('click', ()=> {
+                const time = button.dataset.time;                
+                console.log('attachTimeListeners time: ', time);
+                this.handleTimeClick(time);
+                // this.renderColumnTwo(time);
+            });
+        });
+    }
+
+    handleTimeClick(time) {
+        const dataByTime = new ExternalServices();
+        console.log('selectedDate before getDataByTime called: ', this.selectedDate);
+        console.log('handletimeClick time: ', time);
+        dataByTime.getDataByTime(this.selectedDate, time)
+            .then(newArray => {
+                console.log('dataByTime in handleTimeClick: ', newArray);     //returns the array of json data  
+                // return dataByTime; 
+                this.renderColumnTwo(newArray, time);
+            })
+            .catch(error => {
+                console.error('Error fetching data by time:', error);
+            });
+    }
+     
+
+    renderColumnTwo(data, time) {
+        const columnTwoDOM = document.getElementById('time-of-day');        
+        const dateButtonHTML = this.dateButtonTemplate();
+        const timeListHTML = this.oneTimeTemplate(time);
+        const clientListHTML = this.clientListByTimeTemplate(data);
+
+        columnTwoDOM.innerHTML =  dateButtonHTML + timeListHTML + clientListHTML;
+    }
+} //end column class
+
+

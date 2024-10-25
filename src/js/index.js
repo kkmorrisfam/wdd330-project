@@ -5,9 +5,9 @@ import Column from "./Column.mjs";
 import { addHeaderFooter } from "./headerFooter.mjs";
 import { darkMode } from "./darkMode.mjs";
 
-const binId = process.env.PARCEL_BIN_ID;
-const apiKey = process.env.PARCEL_API_MASTER_KEY;
-const baseURL=process.env.PARCEL_URL;
+// const binId = process.env.PARCEL_BIN_ID;
+// const apiKey = process.env.PARCEL_API_MASTER_KEY;
+// const baseURL=process.env.PARCEL_URL;
 
 //load calendar on screen load
 document.addEventListener('DOMContentLoaded', ()=> {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
         if (selectedDate) {
             console.log('Selected date:', selectedDate);  // Log it when a date is clicked
             //get new updated data with click.  Is here where I want this?           
-            const myfilteredData = new ExternalServices(baseURL, binId, apiKey);            
+            const myfilteredData = new ExternalServices();            
             myfilteredData.getFilteredDataByDay(selectedDate)            
             .then(filteredData=> {
                 console.log('Filtered Data in index: ', filteredData);
@@ -47,15 +47,15 @@ document.addEventListener('DOMContentLoaded', ()=> {
         }
 
         //test 
-        const newAPICall = new ExternalServices(baseURL, binId, apiKey);
-        console.log('selectedDate before getDataByTime called: ', selectedDate);
-        newAPICall.getDataByTime(selectedDate, '9:00a')
-            .then(newArray => {
-                console.log('newAPICall1: ', newArray);     //returns the array of json data   
-            })
-            .catch(error => {
-                console.error('Error fetching data by time:', error);
-            });
+        // const newAPICall = new ExternalServices(baseURL, binId, apiKey);
+        // console.log('selectedDate before getDataByTime called: ', selectedDate);
+        // newAPICall.getDataByTime(selectedDate, '9:00a')
+        //     .then(newArray => {
+        //         console.log('newAPICall1: ', newArray);     //returns the array of json data   
+        //     })
+        //     .catch(error => {
+        //         console.error('Error fetching data by time:', error);
+        //     });
         // console.log('newAPICall2: ', newArray); //still returns promise, but fulfilled, not array
 
     });

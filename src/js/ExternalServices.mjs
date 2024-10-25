@@ -1,10 +1,9 @@
-// const binId = process.env.PARCEL_BIN_ID;
-// const apiKey = process.env.PARCEL_API_MASTER_KEY;
-//const baseURL='https://api.jsonbin.io/v3/b/'
-// const baseURL=process.env.PARCEL_URL;
-
-
 import { convertToDateString } from "./utils.mjs";
+
+const binId = process.env.PARCEL_BIN_ID;
+const apiKey = process.env.PARCEL_API_MASTER_KEY;
+const baseURL=process.env.PARCEL_URL;
+
 
 async function convertToJson(res) {
     const jsonResponse = await res.json();  // Convert the response to JSON first
@@ -22,7 +21,7 @@ async function convertToJson(res) {
 
 export default class ExternalServices {
   //constructor
-  constructor (baseURL, binId, apiKey) {          
+  constructor () {          
     this.baseURL = baseURL;
     this.binId = binId;    
     this.apiKey = apiKey;
@@ -70,7 +69,8 @@ export default class ExternalServices {
   async getDataByTime(selectedDate, selectedTime = '9:00a') {
     try {
       console.log('inside getDataByTime', selectedDate, selectedTime);
-      const jsonPath = `$[?(@.When == '${selectedDate}'${selectedTime ? ` && @.Time == '${selectedTime}'` : ''})]`;
+      // const jsonPath = `$[?(@.When == '${selectedDate}'${selectedTime ? ` && @.Time == '${selectedTime}'` : ''})]`;
+      const jsonPath = `$[?(@.When == '${selectedDate}' && @.Time == '${selectedTime}')]`;
       const response = await fetch(this.baseURL + `${this.binId}/latest?meta=false`, {
         method: "GET",
         headers: {
@@ -81,20 +81,7 @@ export default class ExternalServices {
 
       const myData = await response.json();
       console.log('myData in getDataByTime', myData);      
-      // Convert selected date to the format used in the JSON data
-      // const formattedDate = convertToDateString(selectedDate);
       
-      // Filter the data by the selected date
-      // let filteredData = myData.record.filter(item => item.When && item.When === formattedDate);
-      
-      // If a selected time is provided, filter by time as well
-      // if (selectedTime) {
-      //     filteredData = filteredData.filter(item => item.Time && item.Time === selectedTime);
-      // }
-
-      // Return the filtered data
-      // console.log('Filtered Data by Date and Time:', filteredData);
-      // return filteredData;
       return myData;
     } catch (error) {
         console.error('Error fetching or filtering data by date and time:', error);
