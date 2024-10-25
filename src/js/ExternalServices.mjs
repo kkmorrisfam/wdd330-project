@@ -1,10 +1,9 @@
-// const binId = process.env.PARCEL_BIN_ID;
-// const apiKey = process.env.PARCEL_API_MASTER_KEY;
-//const baseURL='https://api.jsonbin.io/v3/b/'
-// const baseURL=process.env.PARCEL_URL;
-
-
 import { convertToDateString } from "./utils.mjs";
+
+const binId = process.env.PARCEL_BIN_ID;
+const apiKey = process.env.PARCEL_API_MASTER_KEY;
+const baseURL=process.env.PARCEL_URL;
+
 
 async function convertToJson(res) {
     const jsonResponse = await res.json();  // Convert the response to JSON first
@@ -22,7 +21,7 @@ async function convertToJson(res) {
 
 export default class ExternalServices {
   //constructor
-  constructor (baseURL, binId, apiKey) {          
+  constructor () {          
     this.baseURL = baseURL;
     this.binId = binId;    
     this.apiKey = apiKey;
@@ -67,8 +66,33 @@ export default class ExternalServices {
   }
 
   
+  async getDataByTime(selectedDate, selectedTime = '9:00a') {
+    try {
+      console.log('inside getDataByTime', selectedDate, selectedTime);
+      // const jsonPath = `$[?(@.When == '${selectedDate}'${selectedTime ? ` && @.Time == '${selectedTime}'` : ''})]`;
+      const jsonPath = `$[?(@.When == '${selectedDate}' && @.Time == '${selectedTime}')]`;
+      const response = await fetch(this.baseURL + `${this.binId}/latest?meta=false`, {
+        method: "GET",
+        headers: {
+            "X-Master-Key": this.apiKey,
+            'X-JSON-Path': jsonPath
+          }
+        });
+
+      const myData = await response.json();
+      console.log('myData in getDataByTime', myData);      
+      
+      return myData;
+    } catch (error) {
+        console.error('Error fetching or filtering data by date and time:', error);
+        return [];
+    }
+  }  
 
 } //end class
+
+
+
 
 //set local storage here with value?
 
