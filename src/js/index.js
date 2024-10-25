@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', ()=> {
     
     document.querySelector('.days').addEventListener('click', () => {
         const selectedDate = calendar.getSelectedDate();  // Get the selected date
+        //clear column: TODO, refactor to add eventListener for column two in this file?
+        document.getElementById('time-of-day').innerHTML="";
         if (selectedDate) {
             console.log('Selected date:', selectedDate);  // Log it when a date is clicked
             //get new updated data with click.  Is here where I want this?           
@@ -41,7 +43,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
                 console.log('Filtered Data in index: ', filteredData);
                 setLocalStorage('filtered-by-day', filteredData);
                 const columnOne = new Column(filteredData, selectedDate);
-                console.log('selectedDate after creating columnOne: ', selectedDate)
+                console.log('selectedDate after creating columnOne: ', selectedDate);
                 columnOne.renderColumnOne();
             });
         }

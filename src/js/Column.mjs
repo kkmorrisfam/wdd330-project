@@ -38,14 +38,23 @@ export default class Column {
         return `<div class="button time">${time}</div>`;
     }
 
+    // clientListByTimeTemplate(data) {
+    //     // console.log('this.timeDataSource: ', this.timeDataSource);
+    //     const uniqueClients = Array.from(new Set(data.map(client => client['Linked Name'])));
+    //     return `
+    //     <ul class="client-list">                
+    //         ${uniqueClients.map(client => `<li class="button client-name">${client['Linked Name']}</li>`).join('')}
+    //     </ul>`
+    // }
+    
     clientListByTimeTemplate(data) {
-        // console.log('this.timeDataSource: ', this.timeDataSource);
+        const uniqueClients = Array.from(new Set(data.map(client => client['Linked Name'])));
         return `
         <ul class="client-list">                
-            ${data.map(client => `<li class="button client-name">${client['Linked Name']}</li>`).join('')}
-        </ul>`
+            ${uniqueClients.map(client => `<li class="button client-name">${client}</li>`).join('')}
+        </ul>`;
     }
-    
+ 
     renderColumnOne() {        
         const dateButtonHTML = this.dateButtonTemplate();
         const timeListHTML = this.timeListTemplate();
