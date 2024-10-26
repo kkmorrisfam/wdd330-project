@@ -16,6 +16,9 @@
     --header-color: var(--clr-accent-2);
     --text-color: var(--clr-dark-1);
 
+    --shadow: rgb(194, 193, 193);
+    --highlight: rgb(192, 249, 255);
+
 }
 
 .dark-mode {
@@ -24,6 +27,8 @@
     --background-color-3: var(--clr-medium);
     --header-color: var(--clr-light-2);
     --text-color: var(--clr-light-1);
+    --shadow: var(--background-color-1);
+    --highlight : var(--background-color-1);
 }
 
 
@@ -32,6 +37,13 @@ body {
     color: var(--text-color);
     font-family: var(--paragraph-font);
 }
+
+.title {
+    /* color: white; */
+    text-shadow: 
+    1px 1px 2px var(--shadow),
+    0 -2px 0 var(--highlight);  
+    }
 
 #main-container {
     display: flex;
@@ -104,7 +116,7 @@ body {
 }
 
 .week div {
-    opacity: 0.5;
+    opacity: 0.7;
 }
 
 .current-date {
@@ -141,6 +153,14 @@ body {
     border-radius: 10px;
     padding: 1em;
     margin: .5em;
+    
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    /* transition: ease-in; */
+}
+
+.button:hover {
+    transform: scale(1.1);
 }
 
 li {
@@ -148,4 +168,40 @@ li {
     /* padding: .1em;
     margin: .1em; */
 }
+
+.column-animate {
+    
+    position: relative; 
+    opacity: 0;
+    animation: left-to-right 0.5s ease-out forwards;
+}
+
+@keyframes left-to-right {
+    from {
+        transform: translateX(-25%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.column-reverse-animate {
+    position: relative;
+    opacity: 1;
+    animation: right-to-left 0.5s ease-out forwards;
+}
+
+@keyframes right-to-left {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-25%);
+        opacity: 0;
+    }
+}
+
 /* End Column Styles */
