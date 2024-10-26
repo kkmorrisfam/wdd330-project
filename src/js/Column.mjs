@@ -1,4 +1,4 @@
-import { animateContainer, convertTo24Hour } from "./utils.mjs";
+import { animateContainer, convertTo24Hour, getLocalStorage, setLocalStorage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 //get the selected date from calendar, pass in parameter, so it can be used elsewhere
@@ -108,18 +108,63 @@ export default class Column {
     }
      
     renderColumnTwo(data, time) {
-        const dateButtonHTML = this.dateButtonTemplate();
-        // const clientListHTML = this.clientListByTimeTemplate(data);
-        const clientListHTML = this.multClientListByTimeTemplate(data);
+        const dateButtonHTML = this.dateButtonTemplate();        
         const timeButtonHTML = this.oneTimeTemplate(time);
 
+        const columnTwoPreference = getLocalStorage('client-toggle') || 'by-client';
+        const clientListHTML = columnTwoPreference === 'by-client'
+            ? this.clientListByTimeTemplate(data)
+            : this.multClientListByTimeTemplate(data);
+        // const clientListHTML = this.clientListByTimeTemplate(data);
+        // const clientListHTML = this.multClientListByTimeTemplate(data);
+
         const columnTwoDOM = document.getElementById('time-of-day');
-        columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML;
-    
+        columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML + this.renderFooter();
+        
         animateContainer('time-of-day');
+        this.attachToggleListener(data, time);
     }
 
-    
+    renderFooter() {
+        const viewPreference = getLocalStorage('client-toggle') || 'by-client';
+        return `
+        <footer class="column-footer">
+            <button id="toggle-client-view" class="toggle-button">
+                ${viewPreference === 'by-client' ? 'View by Matter' : 'View by Client'}
+            </button>
+        </footer>`;        
+    }
+
+    // attachToggleListener() {
+    //     const toggleButton = document.getElementById('toggle-client-view');
+    //     toggleButton.add('click', ()=> {
+    //       const currentPreference = getLocalStorage('client-toggle') || 'by-client';
+    //       const newPreference = currentPreference === 'by-client' ? 'by-matter' : 'by-client';
+    //       setLocalStorage('client-toggle', newPreference);
+    //       toggleButton.innerText = newPreference === 'by-client' ? 'View by Matter' : 'View by Client';
+    //       const columnTwoDOM = document.getElementById('time-of-day');
+    //       columnTwoDOM.innerHTML = '';
+    //       this.renderColumnTwo(this.dataSource, this.selectedDate); //re-render with updated view.
+    //     });
+    //   }
+
+    attachToggleListener(data, time) {
+        const toggleButton = document.getElementById('toggle-client-view');
+        toggleButton.addEventListener('click', () => {
+            // Toggle between 'by-client' and 'by-matter'
+            const currentPreference = getLocalStorage('client-toggle') || 'by-client';
+            const newPreference = currentPreference === 'by-client' ? 'by-matter' : 'by-client';
+            
+            // Update local storage
+            setLocalStorage('client-toggle', newPreference);
+            
+            // Update button label and re-render the client list
+            toggleButton.innerText = newPreference === 'by-client' ? 'View by Matter' : 'View by Client';
+            const columnTwoDOM = document.getElementById('time-of-day');
+            columnTwoDOM.innerHTML = ''; // Clear current content
+            this.renderColumnTwo(data, time); // Re-render with updated view
+        });
+    }    
     
 } //end column class
 

@@ -90,3 +90,17 @@ export function animateContainer(ElementID) {
   setTimeout(() => DOMElement.classList.remove('column-animate'), 800);
   
 }
+
+// export function attachToggleListener() {
+//   const toggleButton = document.getElementById('toggle-client-view');
+//   toggleButton.add('click', ()=> {
+//     const currentPreference = getLocalStorage('client-toggle') || 'by-client';
+//     const newPreference = currentPreference === 'by-client' ? 'by-matter' : 'by-client';
+//     setLocalStorage('client-toggle', newPreference);
+//     toggleButton.innerText = newPreference === 'by-client' ? 'View by Matter' : 'View by Client';
+//     const columnTwoDOM = document.getElementById('time-of-day');
+//     columnTwoDOM.innerHTML = '';
+//     this.renderColumnTwo(this.dataSource, this.selectedDate); //re-render with updated view.
+//   }
+//   )
+// }
