@@ -41,7 +41,13 @@ export default class Column {
     //this function shows a client only once, even if they have multiple matters
     clientListByTimeTemplate(data) {
         console.log('clientListByTimeTemplate - data: ', data);
-        const uniqueClients = Array.from(new Set(data.map(client => client['Linked Name'])));
+        // const uniqueClients = Array.from(new Set(data.map(client => client['Linked Name'])));
+        const uniqueClients = Array.from(
+            new Set(data
+                .filter(client => client['Linked Name']) // Filter out if there's no Linked Name
+                .map(client => client['Linked Name'])) // Map to Linked Name
+        );
+        
         console.log('uniqueClients: ', uniqueClients);
         return `
         <ul class="client-list">                
@@ -63,6 +69,7 @@ export default class Column {
     renderColumnOne() {        
         const dateButtonHTML = this.dateButtonTemplate();
         const timeListHTML = this.timeListTemplate();
+        
         const columnOneDOM = document.getElementById('column-day');
         
         columnOneDOM.innerHTML = dateButtonHTML + timeListHTML;
@@ -72,7 +79,7 @@ export default class Column {
     
             // Remove the animation class after animation completes
             setTimeout(() => columnOneDOM.classList.remove('column-animate'), 800);
-        
+        // animateContainer('toggle-footer'); //not working here????
         console.log('inside renderColumnOne: ', this.selectedDate, this.dataSource, this.timeDataSource);
         
 
@@ -93,11 +100,28 @@ export default class Column {
     }
 
     handleTimeClick(time) {
+        console.log('inside handleTimeClick');
+
+        // Validate that selectedDate and time are defined
+        if (!this.selectedDate) {
+            console.error('Error: selectedDate is undefined.');
+            return;
+        }
+        
+        if (!time) {
+            console.error('Error: time is undefined or null.');
+            return;
+        }
         const dataByTime = new ExternalServices();
         console.log('selectedDate before getDataByTime called: ', this.selectedDate);
         console.log('handletimeClick time: ', time);
-        dataByTime.getDataByTime(this.selectedDate, time)
+        dataByTime.getDataByTime(this.selectedDate, time)        
             .then(newArray => {
+                // Check if newArray is an array and has data
+                if (!Array.isArray(newArray) || newArray.length === 0) {
+                    console.warn('Warning: No data found for the selected date and time.');
+                    return;
+                }
                 console.log('dataByTime in handleTimeClick: ', newArray);     //returns the array of json data  
                 // return dataByTime; 
                 this.renderColumnTwo(newArray, time);
@@ -108,45 +132,84 @@ export default class Column {
     }
      
     renderColumnTwo(data, time) {
-        const dateButtonHTML = this.dateButtonTemplate();        
-        const timeButtonHTML = this.oneTimeTemplate(time);
+        try{
+            if (!data || !Array.isArray(data) || data.length === 0) {
+                console.warn('Warning: No data provided or data is not an array');
+                return; // Exit the function if data is invalid
+            }
+            
+            if (!time) {
+                console.warn('Warning: Time is undefined or null');
+                return; // Exit the function if time is invalid
+            }
+            let columnTwoDOM = document.getElementById('time-of-day');
+            const dateButtonHTML = this.dateButtonTemplate();        
+            const timeButtonHTML = this.oneTimeTemplate(time);
 
-        const columnTwoPreference = getLocalStorage('client-toggle') || 'by-client';
-        const clientListHTML = columnTwoPreference === 'by-client'
-            ? this.clientListByTimeTemplate(data)
-            : this.multClientListByTimeTemplate(data);
-        // const clientListHTML = this.clientListByTimeTemplate(data);
-        // const clientListHTML = this.multClientListByTimeTemplate(data);
+            const columnTwoPreference = getLocalStorage('client-toggle') || 'by-client';
 
-        const columnTwoDOM = document.getElementById('time-of-day');
-        columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML + this.renderFooter();
-        
-        animateContainer('time-of-day');
-        this.attachToggleListener(data, time);
+            // if (columnTwoPreference === 'by-client') {
+            //      this.clientListByTimeTemplate(data)
+            // } else {
+            //      this.multClientListByTimeTemplate(data);
+            // }
+            const clientListHTML = columnTwoPreference === 'by-client'
+                ? this.clientListByTimeTemplate(data)
+                : this.multClientListByTimeTemplate(data);
+
+                if (!clientListHTML) {
+                    throw new Error('Failed to generate client list HTML');
+                }
+                
+
+
+            // Check if 'time-of-day' exists, or recreate it inside 'toggle-footer'
+            // I don't know why it is getting removed after the first creation?????
+            // but it showed up after rearranging things for the column footer.
+            if (!columnTwoDOM) {
+                console.warn('Element "time-of-day" not found. Creating a new container.');
+
+                columnTwoDOM = document.createElement('div');
+                columnTwoDOM.id = 'time-of-day';
+                columnTwoDOM.className = 'container column';
+
+                // Insert 'time-of-day' within the 'toggle-footer' element
+                const footerContainer = document.getElementById('toggle-footer');
+                if (footerContainer) {
+                    footerContainer.appendChild(columnTwoDOM);
+                } else {
+                    console.warn('Element "toggle-footer" not found in the DOM.');
+                }
+            }
+                //     throw new Error('Error: Element with ID "time-of-day" not found in the DOM');
+                // }
+
+
+            columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML + this.renderFooter();
+            
+            animateContainer('toggle-footer');
+            this.attachToggleListener(data, time);
+        } 
+        catch (error) {
+            console.error('Error in rendering Column Two', error);    
+        }
     }
 
     renderFooter() {
-        const viewPreference = getLocalStorage('client-toggle') || 'by-client';
-        return `
-        <footer class="column-footer">
-            <button id="toggle-client-view" class="toggle-button">
-                ${viewPreference === 'by-client' ? 'View by Matter' : 'View by Client'}
-            </button>
-        </footer>`;        
+        try{
+            const viewPreference = getLocalStorage('client-toggle') || 'by-client';
+            return `
+            <footer class="column-footer">
+                <button id="toggle-client-view" class="toggle-button">
+                    ${viewPreference === 'by-client' ? 'View by Matter' : 'View by Client'}
+                </button>
+            </footer>`;        
+        } 
+        catch (error) {
+            console.error('Error rendering footer in Column Two', error);
+        }
     }
 
-    // attachToggleListener() {
-    //     const toggleButton = document.getElementById('toggle-client-view');
-    //     toggleButton.add('click', ()=> {
-    //       const currentPreference = getLocalStorage('client-toggle') || 'by-client';
-    //       const newPreference = currentPreference === 'by-client' ? 'by-matter' : 'by-client';
-    //       setLocalStorage('client-toggle', newPreference);
-    //       toggleButton.innerText = newPreference === 'by-client' ? 'View by Matter' : 'View by Client';
-    //       const columnTwoDOM = document.getElementById('time-of-day');
-    //       columnTwoDOM.innerHTML = '';
-    //       this.renderColumnTwo(this.dataSource, this.selectedDate); //re-render with updated view.
-    //     });
-    //   }
 
     attachToggleListener(data, time) {
         const toggleButton = document.getElementById('toggle-client-view');
@@ -160,7 +223,7 @@ export default class Column {
             
             // Update button label and re-render the client list
             toggleButton.innerText = newPreference === 'by-client' ? 'View by Matter' : 'View by Client';
-            const columnTwoDOM = document.getElementById('time-of-day');
+            const columnTwoDOM = document.getElementById('toggle-footer');
             columnTwoDOM.innerHTML = ''; // Clear current content
             this.renderColumnTwo(data, time); // Re-render with updated view
         });

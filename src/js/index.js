@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     document.querySelector('.days').addEventListener('click', () => {
         const selectedDate = calendar.getSelectedDate();  // Get the selected date
         //clear column: TODO, refactor to add eventListener for column two in this file?
-        clearContainer('time-of-day');
+        clearContainer('toggle-footer');
         if (selectedDate) {
             console.log('Selected date:', selectedDate);  // Log it when a date is clicked
             //get new updated data with click.  Is here where I want this?           
