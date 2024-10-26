@@ -1,7 +1,7 @@
 export function addHeaderFooter() {
     const headerHTML = `
     <header>
-        <h1>Abacus Law Calendar App</h1>
+        <h1 class="title">Abacus Law Calendar App</h1>
         <button id="dark-toggle" aria-label="dark light toggle button">Dark/Light Mode</button>
     </header>`;
 

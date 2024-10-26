@@ -72,3 +72,21 @@ export function convertTo24Hour(timeStr) {
   // Format the result into "HH:mm" format
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 }
+
+export function clearContainer(ElementID) {
+  console.log('inside clearColumnTwo')
+  const DOMElement = document.getElementById(ElementID);
+  DOMElement.classList.add('column-reverse-animate');
+  setTimeout(()=> {
+    DOMElement.innerHTML = "";
+    DOMElement.classList.remove('column-reverse-animate');
+  }, 800);
+}
+
+export function animateContainer(ElementID) {
+  const DOMElement = document.getElementById(ElementID);
+  DOMElement.classList.add('column-animate');
+  
+  setTimeout(() => DOMElement.classList.remove('column-animate'), 800);
+  
+}

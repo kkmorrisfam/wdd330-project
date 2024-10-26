@@ -1,4 +1,4 @@
-import { convertTo24Hour } from "./utils.mjs";
+import { animateContainer, convertTo24Hour } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 //get the selected date from calendar, pass in parameter, so it can be used elsewhere
@@ -48,7 +48,9 @@ export default class Column {
     // }
     
     clientListByTimeTemplate(data) {
+        console.log('clientListByTimeTemplate - data: ', data);
         const uniqueClients = Array.from(new Set(data.map(client => client['Linked Name'])));
+        console.log('uniqueClients: ', uniqueClients);
         return `
         <ul class="client-list">                
             ${uniqueClients.map(client => `<li class="button client-name">${client}</li>`).join('')}
@@ -59,11 +61,37 @@ export default class Column {
         const dateButtonHTML = this.dateButtonTemplate();
         const timeListHTML = this.timeListTemplate();
         const columnOneDOM = document.getElementById('column-day');
+        
         columnOneDOM.innerHTML = dateButtonHTML + timeListHTML;
-        console.log('inside renderColumnOne: ', this.selectedDate, this.dataSource, this.timeDataSource);
         this.attachTimeListeners();
+            // Add the animation class
+            columnOneDOM.classList.add('column-animate');
+    
+            // Remove the animation class after animation completes
+            setTimeout(() => columnOneDOM.classList.remove('column-animate'), 800);
+        
+        console.log('inside renderColumnOne: ', this.selectedDate, this.dataSource, this.timeDataSource);
+        
 
     }
+
+
+    
+    // renderColumnOne() {
+    //     const dateButtonHTML = this.dateButtonTemplate();
+    //     const timeListHTML = this.timeListTemplate();
+    //     const columnOneDOM = document.getElementById('column-day');
+    //     columnOneDOM.innerHTML = dateButtonHTML + timeListHTML;
+    
+    //     // Add the animation class
+    //     columnOneDOM.classList.add('column-animate');
+    
+    //     // Remove the animation class after animation completes
+    //     setTimeout(() => columnOneDOM.classList.remove('column-animate'), 800);
+        
+    //     this.attachTimeListeners();
+    // }
+
 
     attachTimeListeners() {
         console.log('begin attachTimeListeners');
@@ -94,14 +122,52 @@ export default class Column {
     }
      
 
-    renderColumnTwo(data, time) {
-        const columnTwoDOM = document.getElementById('time-of-day');        
-        const dateButtonHTML = this.dateButtonTemplate();
-        const timeListHTML = this.oneTimeTemplate(time);
-        const clientListHTML = this.clientListByTimeTemplate(data);
+    // renderColumnTwo(data, time) {
+    //     const columnTwoDOM = document.getElementById('time-of-day');        
+    //     const dateButtonHTML = this.dateButtonTemplate();
+    //     const timeListHTML = this.oneTimeTemplate(time);
+    //     const clientListHTML = this.clientListByTimeTemplate(data);
 
-        columnTwoDOM.innerHTML =  dateButtonHTML + timeListHTML + clientListHTML;
+    //     columnTwoDOM.innerHTML =  dateButtonHTML + timeListHTML + clientListHTML;
+
+    //     //add class to animate column
+    //     columnTwoDOM.classList.add('column-animate');
+    //     //remove classList so that it resets for the next time it is rendered.
+    //     setTimeout(() => columnTwoDOM.classList.remove('column-animate', 800));
+    // }
+
+    // renderColumnTwo(time, data) {
+    //     const dateButtonHTML = this.dateButtonTemplate();
+    //     const timeListHTML = this.oneTimeTemplate(time);
+    //     const clientListHTML = this.clientListByTimeTemplate(data);
+    //     const columnTwoDOM = document.getElementById('time-of-day');
+    //     columnTwoDOM.innerHTML = dateButtonHTML + timeListHTML + clientListHTML;
+    
+    //     // Add the animation class
+    //     columnTwoDOM.classList.add('column-animate');
+    
+    //     // Remove the animation class after animation completes
+    //     setTimeout(() => columnTwoDOM.classList.remove('column-animate'), 800);
+    // }
+
+    renderColumnTwo(data, time) {
+        const dateButtonHTML = this.dateButtonTemplate();
+        const clientListHTML = this.clientListByTimeTemplate(data);
+        const columnTwoDOM = document.getElementById('time-of-day');
+        const timeButtonHTML = this.oneTimeTemplate(time);
+        columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML;
+    
+        animateContainer('time-of-day');
+        // // Add the animation class
+        // columnTwoDOM.classList.add('column-animate');
+    
+        // // Remove the animation class after animation completes
+        // setTimeout(() => columnTwoDOM.classList.remove('column-animate'), 800);
+        // // this.clearColumnTwo();
     }
+
+    
+    
 } //end column class
 
 
