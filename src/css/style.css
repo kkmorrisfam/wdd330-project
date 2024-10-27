@@ -141,10 +141,21 @@ body {
 
 /* Column Styles */
 
-.column {
+/* .column {
     min-width: 255px;
     max-height: calc(100vh - 180px);
     overflow-y: auto;
+} */
+
+.column {
+    min-width: 255px;
+    /* Remove overflow-y: auto; from here */
+}
+
+.time-group,
+.client-list {
+    max-height: calc(100vh - 320px); /* Set appropriate max-height for these sections */
+    overflow-y: auto; /* Add scroll to these specific elements */
 }
 
 .button {
