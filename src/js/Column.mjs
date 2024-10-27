@@ -132,68 +132,78 @@ export default class Column {
     }
      
     renderColumnTwo(data, time) {
-        try{
+        try {
+            // Check valid data and time values
             if (!data || !Array.isArray(data) || data.length === 0) {
                 console.warn('Warning: No data provided or data is not an array');
-                return; // Exit the function if data is invalid
+                return;
             }
             
             if (!time) {
                 console.warn('Warning: Time is undefined or null');
-                return; // Exit the function if time is invalid
+                return;
             }
-            let columnTwoDOM = document.getElementById('time-of-day');
+    
+            // Check 'toggle-footer' exists as a sibling to 'column-day'
+            let toggleFooterDOM = document.getElementById('toggle-footer');
+            if (!toggleFooterDOM) {
+                console.warn('Element "toggle-footer" not found. Creating a new container.');
+    
+                toggleFooterDOM = document.createElement('div');
+                toggleFooterDOM.id = 'toggle-footer';
+                toggleFooterDOM.className = 'container';
+    
+                // Insert 'toggle-footer' next to 'column-day' if it exists
+                const columnDayDOM = document.getElementById('column-day');
+                if (columnDayDOM) {
+                    columnDayDOM.insertAdjacentElement('afterend', toggleFooterDOM);
+                } else {
+                    console.warn('Element "column-day" not found in the DOM.');
+                    document.body.appendChild(toggleFooterDOM); // Fallback to body if placement fails
+                }
+            }
+    
+            // Clear out any existing content in 'toggle-footer' before rendering
+            toggleFooterDOM.innerHTML = ''; 
+    
+            // Create 'time-of-day' div inside 'toggle-footer' for column content
+            const columnTwoDOM = document.createElement('div');
+            columnTwoDOM.id = 'time-of-day';
+            columnTwoDOM.className = 'column';
+    
             const dateButtonHTML = this.dateButtonTemplate();        
             const timeButtonHTML = this.oneTimeTemplate(time);
-
+    
             const columnTwoPreference = getLocalStorage('client-toggle') || 'by-client';
-
-            // if (columnTwoPreference === 'by-client') {
-            //      this.clientListByTimeTemplate(data)
-            // } else {
-            //      this.multClientListByTimeTemplate(data);
-            // }
             const clientListHTML = columnTwoPreference === 'by-client'
                 ? this.clientListByTimeTemplate(data)
                 : this.multClientListByTimeTemplate(data);
-
-                if (!clientListHTML) {
-                    throw new Error('Failed to generate client list HTML');
-                }
-                
-
-
-            // Check if 'time-of-day' exists, or recreate it inside 'toggle-footer'
-            // I don't know why it is getting removed after the first creation?????
-            // but it showed up after rearranging things for the column footer.
-            if (!columnTwoDOM) {
-                console.warn('Element "time-of-day" not found. Creating a new container.');
-
-                columnTwoDOM = document.createElement('div');
-                columnTwoDOM.id = 'time-of-day';
-                columnTwoDOM.className = 'container column';
-
-                // Insert 'time-of-day' within the 'toggle-footer' element
-                const footerContainer = document.getElementById('toggle-footer');
-                if (footerContainer) {
-                    footerContainer.appendChild(columnTwoDOM);
-                } else {
-                    console.warn('Element "toggle-footer" not found in the DOM.');
-                }
+    
+            // Validate generated client list HTML
+            if (!clientListHTML) {
+                throw new Error('Failed to generate client list HTML');
             }
-                //     throw new Error('Error: Element with ID "time-of-day" not found in the DOM');
-                // }
-
-
-            columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML + this.renderFooter();
+    
+            // Populate 'time-of-day' with date, time, and client list
+            columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML;
             
-            animateContainer('toggle-footer');
-            this.attachToggleListener(data, time);
+            // Append 'time-of-day' column content to 'toggle-footer'
+            toggleFooterDOM.appendChild(columnTwoDOM);
+    
+            // Create and append 'column-footer' as a sibling inside 'toggle-footer'
+            const footerDOM = document.createElement('div');
+            footerDOM.className = 'column-footer';
+            footerDOM.innerHTML = this.renderFooter();
+            toggleFooterDOM.appendChild(footerDOM);
+    
+            animateContainer('time-of-day'); // Animate content load in 'time-of-day'
+            this.attachToggleListener(data, time); // Attach toggle listener
         } 
         catch (error) {
-            console.error('Error in rendering Column Two', error);    
+            console.error('Error in rendering Column Two:', error);    
         }
     }
+    
 
     renderFooter() {
         try{

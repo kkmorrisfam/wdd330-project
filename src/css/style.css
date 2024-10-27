@@ -143,6 +143,14 @@ body {
 
 .column {
     min-width: 255px;
+    /* max-height: calc(100vh - 180px);
+    overflow-y: auto;
+    padding-bottom: 2rem; */
+}
+
+.time-group, 
+.selected-day {
+    min-width: 255px;
     max-height: calc(100vh - 180px);
     overflow-y: auto;
     padding-bottom: 2rem;
