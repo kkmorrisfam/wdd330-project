@@ -28,7 +28,7 @@ export default class ExternalServices {
     
   }
 
-  
+  //test function to get all data - this is working
   async getMyData() {
     
     const response = await fetch(this.baseURL + `${this.binId}/latest`, {  

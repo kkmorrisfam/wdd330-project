@@ -1,5 +1,6 @@
-import { animateContainer, convertTo24Hour } from "./utils.mjs";
+import { animateContainer, convertTo24Hour, setLocalStorage, getLocalStorage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
+
 
 //get the selected date from calendar, pass in parameter, so it can be used elsewhere
 export default class Column {
@@ -19,7 +20,26 @@ export default class Column {
             return timesArray;
           }, [])
           .sort((a, b) => convertTo24Hour(a).localeCompare(convertTo24Hour(b))); // Sort by 24-hour format
-      }
+    }
+
+    initialColumnOneTemplate() {
+        const calendarColumnDOM = document.getElementById("calendar-column");
+        const dayColumnDOM = document.createElement("div");
+        dayColumnDOM.classList.add("container");
+        dayColumnDOM.classList.add("column");
+        // dayColumnDOM.classList.add("test");
+        dayColumnDOM.id = "column-day";
+        calendarColumnDOM.insertAdjacentElement("afterend", dayColumnDOM);
+    }
+
+    initialColumnTwoTemplate() {
+        const dayColumnDOM = document.getElementById("column-day");
+        const oneTimeColumnDOM = document.createElement("div");
+        dayColumnDOM.classList.add("container");
+        dayColumnDOM.classList.add("column");        
+        dayColumnDOM.id = "time-of-day";
+        calendarColumnDOM.insertAdjacentElement("afterend", dayColumnDOM);
+    }
 
     dateButtonTemplate() {
         return `<div class="button selectedDay">${this.selectedDate}</div>`;
@@ -38,26 +58,38 @@ export default class Column {
         return `<div class="button time">${time}</div>`;
     }
 
-    // clientListByTimeTemplate(data) {
-    //     // console.log('this.timeDataSource: ', this.timeDataSource);
-    //     const uniqueClients = Array.from(new Set(data.map(client => client['Linked Name'])));
-    //     return `
-    //     <ul class="client-list">                
-    //         ${uniqueClients.map(client => `<li class="button client-name">${client['Linked Name']}</li>`).join('')}
-    //     </ul>`
-    // }
-    
+        
     clientListByTimeTemplate(data) {
-        console.log('clientListByTimeTemplate - data: ', data);
+        // console.log('clientListByTimeTemplate - data: ', data);
         const uniqueClients = Array.from(new Set(data.map(client => client['Linked Name'])));
-        console.log('uniqueClients: ', uniqueClients);
+        // console.log('uniqueClients: ', uniqueClients);
         return `
         <ul class="client-list">                
             ${uniqueClients.map(client => `<li class="button client-name">${client}</li>`).join('')}
         </ul>`;
     }
- 
+
+    //this function lists multiple clients with different matters
+    multClientListByTimeTemplate(data) {        
+        // console.log('data in muliClientListByTime: ', data);
+        return `
+        <ul class="client-list">                
+            ${data.map(client => `<li class="button client-name">${client['Linked Matter']}</li>`).join('')}
+        </ul>`;
+    }
+
     renderColumnOne() {        
+    //this code currrently creates multiple columns if muliple dates are clicked.
+    //TODO: fix
+        // this.initialColumnOneTemplate();
+        // const calendarColumnDOM = document.getElementById("calendar-column");
+        // const dayColumnDOM = document.createElement("div");
+        // dayColumnDOM.classList.add("container");
+        // dayColumnDOM.classList.add("column");
+        // dayColumnDOM.classList.add("test");
+        // dayColumnDOM.id = "column-day";
+        // console.log('dayColumnDOM', dayColumnDOM);
+        // calendarColumnDOM.insertAdjacentElement("afterend", dayColumnDOM);
         const dateButtonHTML = this.dateButtonTemplate();
         const timeListHTML = this.timeListTemplate();
         const columnOneDOM = document.getElementById('column-day');
@@ -71,27 +103,7 @@ export default class Column {
             setTimeout(() => columnOneDOM.classList.remove('column-animate'), 800);
         
         console.log('inside renderColumnOne: ', this.selectedDate, this.dataSource, this.timeDataSource);
-        
-
     }
-
-
-    
-    // renderColumnOne() {
-    //     const dateButtonHTML = this.dateButtonTemplate();
-    //     const timeListHTML = this.timeListTemplate();
-    //     const columnOneDOM = document.getElementById('column-day');
-    //     columnOneDOM.innerHTML = dateButtonHTML + timeListHTML;
-    
-    //     // Add the animation class
-    //     columnOneDOM.classList.add('column-animate');
-    
-    //     // Remove the animation class after animation completes
-    //     setTimeout(() => columnOneDOM.classList.remove('column-animate'), 800);
-        
-    //     this.attachTimeListeners();
-    // }
-
 
     attachTimeListeners() {
         console.log('begin attachTimeListeners');
@@ -121,52 +133,61 @@ export default class Column {
             });
     }
      
-
-    // renderColumnTwo(data, time) {
-    //     const columnTwoDOM = document.getElementById('time-of-day');        
-    //     const dateButtonHTML = this.dateButtonTemplate();
-    //     const timeListHTML = this.oneTimeTemplate(time);
-    //     const clientListHTML = this.clientListByTimeTemplate(data);
-
-    //     columnTwoDOM.innerHTML =  dateButtonHTML + timeListHTML + clientListHTML;
-
-    //     //add class to animate column
-    //     columnTwoDOM.classList.add('column-animate');
-    //     //remove classList so that it resets for the next time it is rendered.
-    //     setTimeout(() => columnTwoDOM.classList.remove('column-animate', 800));
-    // }
-
-    // renderColumnTwo(time, data) {
-    //     const dateButtonHTML = this.dateButtonTemplate();
-    //     const timeListHTML = this.oneTimeTemplate(time);
-    //     const clientListHTML = this.clientListByTimeTemplate(data);
-    //     const columnTwoDOM = document.getElementById('time-of-day');
-    //     columnTwoDOM.innerHTML = dateButtonHTML + timeListHTML + clientListHTML;
-    
-    //     // Add the animation class
-    //     columnTwoDOM.classList.add('column-animate');
-    
-    //     // Remove the animation class after animation completes
-    //     setTimeout(() => columnTwoDOM.classList.remove('column-animate'), 800);
-    // }
-
     renderColumnTwo(data, time) {
+        // this.initialColumnTwoTemplate();  //fix for later.
         const dateButtonHTML = this.dateButtonTemplate();
-        const clientListHTML = this.clientListByTimeTemplate(data);
-        const columnTwoDOM = document.getElementById('time-of-day');
         const timeButtonHTML = this.oneTimeTemplate(time);
-        columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML;
+        // const clientListHTML = this.clientListByTimeTemplate(data);
+
+        console.log('inside renderColumnTwo: data:', data);
+        // Choose template based on local storage preference
+        const viewPreference = getLocalStorage('client-toggle') || 'by-client';
+        const clientListHTML = viewPreference === 'by-client' 
+        ? this.clientListByTimeTemplate(data) 
+        : this.multClientListByTimeTemplate(data);
+
+        const columnTwoDOM = document.getElementById('time-of-day');
+        
+        columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML + this.renderFooter();
     
         animateContainer('time-of-day');
-        // // Add the animation class
-        // columnTwoDOM.classList.add('column-animate');
-    
-        // // Remove the animation class after animation completes
-        // setTimeout(() => columnTwoDOM.classList.remove('column-animate'), 800);
-        // // this.clearColumnTwo();
+        this.attachToggleListener(data, time);
+    }    
+
+    renderFooter() {
+        try{
+            const viewPreference = getLocalStorage('client-toggle') || 'by-client';
+            return `
+            <footer class="column-footer">
+                <button id="toggle-client-view" class="toggle-button">
+                    ${viewPreference === 'by-client' ? 'View by Matter' : 'View by Client'}
+                </button>
+            </footer>`;        
+        } 
+        catch (error) {
+            console.error('Error rendering footer in Column Two', error);
+        }
     }
 
-    
+
+    attachToggleListener(data, time) {
+        // console.log('inside attachToggleListener, data: ', data);
+        const toggleButton = document.getElementById('toggle-client-view');
+        toggleButton.addEventListener('click', () => {
+            // Toggle between 'by-client' and 'by-matter'
+            const currentPreference = getLocalStorage('client-toggle') || 'by-client';
+            const newPreference = currentPreference === 'by-client' ? 'by-matter' : 'by-client';
+            
+            // Update local storage
+            setLocalStorage('client-toggle', newPreference);
+            
+            // Update button label and re-render the client list
+            toggleButton.innerText = newPreference === 'by-client' ? 'View by Matter' : 'View by Client';
+            const columnTwoDOM = document.getElementById('time-of-day');
+            columnTwoDOM.innerHTML = ''; // Clear current content
+            this.renderColumnTwo(data, time); // Re-render with updated view
+        });
+    }
     
 } //end column class
 
