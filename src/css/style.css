@@ -175,6 +175,10 @@ body {
     transform: scale(1.1);
 }
 
+.button:active {
+    transform: translateY(6px);
+}
+
 li {
     list-style-type: none;
     /* padding: .1em;
