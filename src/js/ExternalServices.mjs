@@ -56,9 +56,10 @@ export default class ExternalServices {
           }
       });
       const myData = await response.json();
+      console.log('Data for ColumnOne after response.json(): ', myData);
       const formattedDate = convertToDateString(selectedDate);
       const filteredData = myData.record.filter(item=> item.When && item.When === formattedDate);
-      console.log('filteredData in ES: ', filteredData);
+      
       return filteredData;
     } catch (error) {
       console.error('Error fetching or filtering data:', error);
@@ -68,7 +69,7 @@ export default class ExternalServices {
   
   async getDataByTime(selectedDate, selectedTime = '9:00a') {
     try {
-      console.log('inside getDataByTime', selectedDate, selectedTime);
+      // console.log('inside getDataByTime', selectedDate, selectedTime);
       // const jsonPath = `$[?(@.When == '${selectedDate}'${selectedTime ? ` && @.Time == '${selectedTime}'` : ''})]`;
       const jsonPath = `$[?(@.When == '${selectedDate}' && @.Time == '${selectedTime}')]`;
       const response = await fetch(this.baseURL + `${this.binId}/latest?meta=false`, {
@@ -80,7 +81,7 @@ export default class ExternalServices {
         });
 
       const myData = await response.json();
-      console.log('myData in getDataByTime', myData);      
+      console.log('myData in getDataByTime after response.json()', myData);      
       
       return myData;
     } catch (error) {

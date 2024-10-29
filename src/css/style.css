@@ -141,19 +141,13 @@ body {
 
 /* Column Styles */
 
-/* .column {
-    min-width: 255px;
-    max-height: calc(100vh - 180px);
-    overflow-y: auto;
-} */
-
 .column {
     min-width: 255px;
 }
 
 .time-group,
 .client-list {
-    max-height: calc(100vh - 20rem); 
+    max-height: calc(100vh - 26rem); 
     overflow-y: auto; /* Add scroll */
 }
 

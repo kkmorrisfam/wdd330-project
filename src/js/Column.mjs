@@ -11,6 +11,7 @@ export default class Column {
     }
 
     getUniqueTimes() {
+        // console.log('getUniqueTimes, date: ', this.selectedDate);
         return this.dataSource
           .reduce((timesArray, item) => {
             if (!timesArray.includes(item.Time) && item.Time !== '') {
@@ -19,9 +20,11 @@ export default class Column {
             this.timeDataSource = timesArray;
             return timesArray;
           }, [])
-          .sort((a, b) => convertTo24Hour(a).localeCompare(convertTo24Hour(b))); // Sort by 24-hour format
+          //assures times are in a chronological order AM to PM, converts to 24 hrs, then back
+          .sort((a, b) => convertTo24Hour(a).localeCompare(convertTo24Hour(b))); 
     }
 
+    //not working yet as intended
     initialColumnOneTemplate() {
         const calendarColumnDOM = document.getElementById("calendar-column");
         const dayColumnDOM = document.createElement("div");
@@ -32,6 +35,7 @@ export default class Column {
         calendarColumnDOM.insertAdjacentElement("afterend", dayColumnDOM);
     }
 
+    //not working yet as intended
     initialColumnTwoTemplate() {
         const dayColumnDOM = document.getElementById("column-day");
         const oneTimeColumnDOM = document.createElement("div");
@@ -46,8 +50,7 @@ export default class Column {
     }
 
     timeListTemplate() {
-        const timesList = this.getUniqueTimes();   
-        
+        const timesList = this.getUniqueTimes();           
         return `
         <ul class="time-group">
         ${timesList.map(time=>`<li class="button time" data-time="${time}">${time}</li>`).join('')}
@@ -57,7 +60,6 @@ export default class Column {
     oneTimeTemplate(time) {
         return `<div class="button time">${time}</div>`;
     }
-
         
     clientListByTimeTemplate(data) {
         // console.log('clientListByTimeTemplate - data: ', data);
@@ -102,29 +104,31 @@ export default class Column {
             // Remove the animation class after animation completes
             setTimeout(() => columnOneDOM.classList.remove('column-animate'), 800);
         
-        console.log('inside renderColumnOne: ', this.selectedDate, this.dataSource, this.timeDataSource);
+        // console.log('inside renderColumnOne: ', this.selectedDate, this.dataSource, this.timeDataSource);
     }
 
     attachTimeListeners() {
-        console.log('begin attachTimeListeners');
+        // console.log('begin attachTimeListeners');
         const timeButtonsDOM = document.querySelectorAll('.button.time');
         timeButtonsDOM.forEach(button => {
             button.addEventListener('click', ()=> {
                 const time = button.dataset.time;                
-                console.log('attachTimeListeners time: ', time);
+                // console.log('attachTimeListeners time: ', time);
                 this.handleTimeClick(time);
                 // this.renderColumnTwo(time);
             });
         });
     }
 
-    handleTimeClick(time) {
+    handleTimeClick(time) {        
         const dataByTime = new ExternalServices();
-        console.log('selectedDate before getDataByTime called: ', this.selectedDate);
-        console.log('handletimeClick time: ', time);
+        // console.log('selectedDate before getDataByTime called: ', this.selectedDate);
+        // console.log('handletimeClick time: ', time);
+
+        //request filtered date from the api
         dataByTime.getDataByTime(this.selectedDate, time)
             .then(newArray => {
-                console.log('dataByTime in handleTimeClick: ', newArray);     //returns the array of json data  
+                // console.log('dataByTime in handleTimeClick: ', newArray);     //returns the array of json data  
                 // return dataByTime; 
                 this.renderColumnTwo(newArray, time);
             })
@@ -139,7 +143,7 @@ export default class Column {
         const timeButtonHTML = this.oneTimeTemplate(time);
         // const clientListHTML = this.clientListByTimeTemplate(data);
 
-        console.log('inside renderColumnTwo: data:', data);
+        // console.log('inside renderColumnTwo: data:', data);
         // Choose template based on local storage preference
         const viewPreference = getLocalStorage('client-toggle') || 'by-client';
         const clientListHTML = viewPreference === 'by-client' 
