@@ -134,14 +134,11 @@ export default class Column {
     }
 
     handleTimeClick(time) {        
-        const dataByTime = new ExternalServices();
-        console.log('selectedDate before getDataByTime called: ', this.selectedDate);
-        console.log('handletimeClick time: ', time);
-
+        const dataByTime = new ExternalServices();        
         //request filtered date from the api
         dataByTime.getDataByTime(this.selectedDate, time)
             .then(newArray => {
-                console.log('dataByTime in handleTimeClick: ', newArray);     //returns the array of json data  
+                // console.log('dataByTime in handleTimeClick: ', newArray);     //returns the array of json data  
                 // return dataByTime; 
                 this.renderColumnTwo(newArray, time);
             })
@@ -175,7 +172,7 @@ export default class Column {
             clientButtons.forEach(button => {
             button.addEventListener('click', (event) => {
                 const client = event.target.dataset.client || event.target.dataset.matter;
-                console.log("clientButtons in ColumnTwoDOM: ", client);
+                // console.log("clientButtons in ColumnTwoDOM: ", client);
                 this.handleClientMatterClick(client, data);
                 
             });
@@ -245,8 +242,8 @@ export default class Column {
     renderMatterDetailsTemplate(matter, targetElement) {
         //placeholder to place a form based on JSON data
         //TODO: finish form
-        console.log('matter: ', matter);
-        //if I use the value to post, I will need to set a value to the textarea
+        // console.log('matter: ', matter);
+        
         const formHTML = 
         `<div class="matter-details"
             <label>Client: </label><input type="text" name="clientName" value="${matter['Linked Name']}" disabled><br>
@@ -287,7 +284,7 @@ export default class Column {
             item['Linked Name']===client || item['Case Number'] === client
             
         );
-        console.log('handleClientMatterClick client:', client);
+        // console.log('handleClientMatterClick client:', client);
         this.renderColumnThree(client, filteredData);
     }
     
