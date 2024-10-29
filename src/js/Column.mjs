@@ -46,7 +46,7 @@ export default class Column {
     }
 
     dateButtonTemplate() {
-        return `<div class="button selectedDay">${this.selectedDate}</div>`;
+        return `<div class="title-button selectedDay">${this.selectedDate}</div>`;
     }
 
     timeListTemplate() {
@@ -58,7 +58,7 @@ export default class Column {
     }
 
     oneTimeTemplate(time) {
-        return `<div class="button time">${time}</div>`;
+        return `<div class="title-button time">${time}</div>`;
     }
         
     clientListByTimeTemplate(data) {
