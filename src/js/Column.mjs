@@ -176,7 +176,7 @@ export default class Column {
             button.addEventListener('click', (event) => {
                 const client = event.target.dataset.client || event.target.dataset.matter;
                 console.log("clientButtons in ColumnTwoDOM: ", client);
-                this.handleClientMatterClick(client, data, time);
+                this.handleClientMatterClick(client, data);
                 
             });
         });
@@ -193,6 +193,8 @@ export default class Column {
       columnThreeDOM.id = 'client-details';
       columnThreeDOM.className = 'container column';
 
+      //client is either client name or case number
+      //TODO: add abililty to show client name also in header if client=case number
       const clientHeader = `<div class="title-button selectedClient"> ${client}</div>`;
       const matterlistHTML = this.singleClientListTemplate(filteredData);
       //create column Three
@@ -247,7 +249,7 @@ export default class Column {
         //if I use the value to post, I will need to set a value to the textarea
         const formHTML = 
         `<div class="matter-details"
-        
+            <label>Client: </label><input type="text" name="clientName" value="${matter['Linked Name']}" disabled><br>
             <label>Case Number: </label><input type="text" name="caseNumber" value="${matter['Case Number']}" disabled><br>
             <label>What: </label> <input type="text" name="what" value="${matter.What}"><br>
             <label>Who: </label> <input type="text" name="who" value="${matter.Who}"><br>
@@ -279,14 +281,15 @@ export default class Column {
         });
     }
 
-    handleClientMatterClick(client, data, time) {
+    handleClientMatterClick(client, data) {
         //Filter data to get all items to match selected
-        const filteredData = data.filter(item=>
+        const filteredData = data.filter(item=> 
             item['Linked Name']===client || item['Case Number'] === client
+            
         );
-        this.renderColumnThree(client, filteredData, time);
+        console.log('handleClientMatterClick client:', client);
+        this.renderColumnThree(client, filteredData);
     }
     
 } //end column class
-
 
