@@ -152,13 +152,13 @@ export default class Column {
 
         const columnTwoDOM = document.getElementById('time-of-day');
         
-        columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML + this.renderFooter();
+        columnTwoDOM.innerHTML = dateButtonHTML + timeButtonHTML + clientListHTML + this.renderColumnFooter();
     
         animateContainer('time-of-day');
         this.attachToggleListener(data, time);
     }    
 
-    renderFooter() {
+    renderColumnFooter() {
         try{
             const viewPreference = getLocalStorage('client-toggle') || 'by-client';
             return `
