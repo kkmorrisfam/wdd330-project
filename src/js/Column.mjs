@@ -45,6 +45,17 @@ export default class Column {
         calendarColumnDOM.insertAdjacentElement("afterend", dayColumnDOM);
     }
 
+    singleClientListTemplate(data) {
+        return `
+        <ul class="matter-list">
+            ${data.map((item, index) => `
+                <li class="button matter-item" data-matter="${item['Case Number']}" id="matter-${index}">
+                    ${item['Linked Matter']}
+                </li>
+            `).join('')}
+        </ul>`;
+    }
+
     dateButtonTemplate() {
         return `<div class="title-button selectedDay">${this.selectedDate}</div>`;
     }
@@ -67,16 +78,18 @@ export default class Column {
         // console.log('uniqueClients: ', uniqueClients);
         return `
         <ul class="client-list">                
-            ${uniqueClients.map(client => `<li class="button client-name">${client}</li>`).join('')}
+            ${uniqueClients.map((client, index) => `<li class="button client-name" data-client="${client}" id="client-${index}" >${client}</li>`).join('')}
         </ul>`;
     }
 
-    //this function lists multiple clients with different matters
+    // this function lists multiple clients with different matters
     multClientListByTimeTemplate(data) {        
         // console.log('data in muliClientListByTime: ', data);
         return `
         <ul class="client-list">                
-            ${data.map(client => `<li class="button client-name">${client['Linked Matter']}</li>`).join('')}
+             ${data.map((client, index)=> 
+                `<li class="button client-name" data-matter="${client['Case Number']}" id="matter-${index}">${client['Linked Matter']}</li>`).join('')}
+
         </ul>`;
     }
 
@@ -122,13 +135,13 @@ export default class Column {
 
     handleTimeClick(time) {        
         const dataByTime = new ExternalServices();
-        // console.log('selectedDate before getDataByTime called: ', this.selectedDate);
-        // console.log('handletimeClick time: ', time);
+        console.log('selectedDate before getDataByTime called: ', this.selectedDate);
+        console.log('handletimeClick time: ', time);
 
         //request filtered date from the api
         dataByTime.getDataByTime(this.selectedDate, time)
             .then(newArray => {
-                // console.log('dataByTime in handleTimeClick: ', newArray);     //returns the array of json data  
+                console.log('dataByTime in handleTimeClick: ', newArray);     //returns the array of json data  
                 // return dataByTime; 
                 this.renderColumnTwo(newArray, time);
             })
@@ -156,7 +169,61 @@ export default class Column {
     
         animateContainer('time-of-day');
         this.attachToggleListener(data, time);
+
+        //Attach event listeners to client or matter buttons    
+        const clientButtons = columnTwoDOM.querySelectorAll('.button.client-name');
+            clientButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const client = event.target.dataset.client || event.target.dataset.matter;
+                console.log("clientButtons in ColumnTwoDOM: ", client);
+                this.handleClientMatterClick(client, data, time);
+                
+            });
+        });
     }    
+
+    renderColumnThree(client, filteredData) {
+      //check for existing column, remove if present so there's only one column three
+        let columnThreeDOM = document.getElementById('client-details');
+      if (columnThreeDOM) {
+        columnThreeDOM.remove() 
+      }  
+
+      columnThreeDOM = document.createElement('div');
+      columnThreeDOM.id = 'client-details';
+      columnThreeDOM.className = 'container column';
+
+      const clientHeader = `<div class="title-button selectedClient"> ${client}</div>`;
+      const matterlistHTML = this.singleClientListTemplate(filteredData);
+      //create column Three
+      columnThreeDOM.innerHTML = clientHeader + matterlistHTML;
+
+      //insert into DOM
+      const columnTwoDOM = document.getElementById('time-of-day');
+      if (columnTwoDOM) {
+        columnTwoDOM.insertAdjacentElement("afterend", columnThreeDOM);
+      }
+
+      //add event listeners to each matter butto to expand for further details
+      const matterButtons = columnThreeDOM.querySelectorAll('.matter-item');
+      matterButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            //set variable to the value of the target at data-matter
+            const matterId = event.target.dataset.matter;
+            //where data.matter matches: the clicked button equals the filteredData item
+            const singleMatter = filteredData.find(item=>item['Case Number'] === matterId)
+            if (singleMatter) {
+                //if the clicked event matches, then display HTML template with filtered data
+                this.renderMatterDetailsTemplate(singleMatter, event.target);
+            } else {
+                console.warn(`No data found for Case Number: ${matterId}`);
+            }
+            
+            // const matterDetailsHTML = this.renderMatterDetailsTemplate(matter);
+            // this.event.target.innerHTML = matterDetailsHTML;
+        });
+      });
+    }
 
     renderColumnFooter() {
         try{
@@ -173,6 +240,25 @@ export default class Column {
         }
     }
 
+    renderMatterDetailsTemplate(matter, targetElement) {
+        //placeholder to place a form based on JSON data
+        //TODO: finish form
+        console.log('matter: ', matter);
+        //if I use the value to post, I will need to set a value to the textarea
+        const formHTML = 
+        `<div class="matter-details"
+        
+            <label>Case Number: </label><input type="text" name="caseNumber" value="${matter['Case Number']}" disabled><br>
+            <label>What: </label> <input type="text" name="what" value="${matter.What}"><br>
+            <label>Who: </label> <input type="text" name="who" value="${matter.Who}"><br>
+            <label>Status: </label> <input type="text" name="status" value="${matter.Status}"><br>
+            
+            <label>Note: </label> <textarea rows="4" cols="50" name="status">${matter.Note}</textarea><br>
+            <label>Duration: </label> <input type="text" name="duration" value="${matter.Duration}"><br>
+        </div>`
+
+        targetElement.innerHTML = formHTML;
+    }
 
     attachToggleListener(data, time) {
         // console.log('inside attachToggleListener, data: ', data);
@@ -191,6 +277,14 @@ export default class Column {
             columnTwoDOM.innerHTML = ''; // Clear current content
             this.renderColumnTwo(data, time); // Re-render with updated view
         });
+    }
+
+    handleClientMatterClick(client, data, time) {
+        //Filter data to get all items to match selected
+        const filteredData = data.filter(item=>
+            item['Linked Name']===client || item['Case Number'] === client
+        );
+        this.renderColumnThree(client, filteredData, time);
     }
     
 } //end column class
