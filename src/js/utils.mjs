@@ -74,7 +74,7 @@ export function convertTo24Hour(timeStr) {
 }
 
 export function clearContainer(ElementID) {
-  console.log('inside clearColumnTwo')
+  // console.log('inside clearColumnTwo')
   const DOMElement = document.getElementById(ElementID);
   DOMElement.classList.add('column-reverse-animate');
   setTimeout(()=> {

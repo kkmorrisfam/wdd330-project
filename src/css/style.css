@@ -143,8 +143,12 @@ body {
 
 .column {
     min-width: 255px;
-    max-height: calc(100vh - 180px);
-    overflow-y: auto;
+}
+
+.time-group,
+.client-list {
+    max-height: calc(100vh - 26rem); 
+    overflow-y: auto; /* Add scroll */
 }
 
 .button {
@@ -202,6 +206,24 @@ li {
         transform: translateX(-25%);
         opacity: 0;
     }
+}
+
+.column-footer {
+    position: sticky;
+    bottom: 0;
+    background-color: var(--background-color-3);
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid var(--clr-dark-1);
+}
+
+.toggle-button {
+    background-color: var(--clr-accent-1);
+    color: var(--clr-light-1);
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* End Column Styles */
