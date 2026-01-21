@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     //if there's a date in local storage, then load the first column with that date
     if (storedDataByDay && storedDataByDay.length > 0){
         const selectedDate = storedDataByDay[0]?.When || calendar.getSelectedDate();
-        // console.log('Loaded data from Local Storage:', storedDataByDay);
+        console.log('Loaded data from Local Storage:', storedDataByDay);
         const column = new Column(storedDataByDay, selectedDate);
         column.renderColumnOne();
         }

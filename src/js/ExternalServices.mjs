@@ -30,21 +30,22 @@ export default class ExternalServices {
 
   //test function to get all data - this is working
   async getMyData() {
-    
-    const response = await fetch(this.baseURL + `${this.binId}/latest`, {  
-      method: "GET",
-      headers: {
-          "X-Master-Key": this.apiKey
-        }
-    });
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-    }
+   try{   
+      const response = await fetch(this.baseURL + `${this.binId}/latest`, {  
+        method: "GET",
+        headers: {
+            "X-Master-Key": this.apiKey
+          }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
 
-    const data = await response.json();
-    return data;  // Return the fetched data here
-  } catch (error) {
-    console.error('There has been a problem with your fetch operation:', error);
+      const data = await response.json();
+      return data;  // Return the fetched data here
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+    }
   }
 
   async getFilteredDataByDay(selectedDate) {
@@ -56,10 +57,26 @@ export default class ExternalServices {
           }
       });
       const myData = await response.json();
-      console.log('Data for ColumnOne after response.json(): ', myData);
+      // console.log('Data for ColumnOne after response.json(): ', myData);
       const formattedDate = convertToDateString(selectedDate);
-      const filteredData = myData.record.filter(item=> item.When && item.When === formattedDate);
       
+      //normalize date
+      const padMMDDYYYY = (dateStr) => {
+        const [m, d, y] = dateStr.split("/");
+        return `${String(Number(m)).padStart(2,"0")}/${String(Number(d)).padStart(2, "0")}/${y}`;
+      };
+
+      const targetDate = padMMDDYYYY(formattedDate);  
+
+      //normalize filtered data
+      const filteredData = myData.record.filter((item)=> {
+        if(!item.When) return false;
+        return padMMDDYYYY(item.When) === targetDate;
+      });
+
+      console.log("Target date: ", targetDate);
+      console.log("Matches found: ", filteredData.length);
+     
       return filteredData;
     } catch (error) {
       console.error('Error fetching or filtering data:', error);

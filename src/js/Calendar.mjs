@@ -8,6 +8,7 @@ export default class Calendar {
         this.days = document.querySelector(".days");
         this.selected = document.querySelector(".selected");
         this.date = new Date();
+        this.date.setDate(1); //normalize
         this.year = this.date.getFullYear();
         this.month = this.date.getMonth();
         this.selectedDate = this.date.toDateString();  //set selected date to current date initially
@@ -28,11 +29,18 @@ export default class Calendar {
         const lastDay = new Date(this.year, this.month + 1, 0);
         const numberOfDays = lastDay.getDate();
     
-        let stringDate = this.date.toLocaleString("en-US", {
+        // let stringDate = this.date.toLocaleString("en-US", {
+        //     month: "long",
+        //     year: "numeric",
+        // });
+
+        const headerDate = new Date(this.year, this.month, 1);
+        let stringDate = headerDate.toLocaleString("en-US", {
             month: "long",
             year: "numeric",
         });
-    
+        
+        console.log("stringDate", stringDate);
         this.displayDOM.innerHTML = `${stringDate}`;
         this.days.innerHTML = ""; // Clear previous days
     
@@ -100,7 +108,8 @@ export default class Calendar {
             this.year--;
             }
     
-            this.date.setMonth(this.month);
+            // this.date.setMonth(this.month);  //this wasn't changing the year
+            this.date = new Date(this.year, this.month, 1);
             this.displayCalendar();
             this.displaySelected();
         });
@@ -117,7 +126,8 @@ export default class Calendar {
             this.year++;
             }
     
-            this.date.setMonth(this.month);
+            // this.date.setMonth(this.month);
+            this.date = new Date(this.year, this.month, 1);
             this.displayCalendar();
             this.displaySelected();
         });

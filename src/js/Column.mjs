@@ -14,10 +14,12 @@ export default class Column {
         // console.log('getUniqueTimes, date: ', this.selectedDate);
         return this.dataSource
           .reduce((timesArray, item) => {
-            if (!timesArray.includes(item.Time) && item.Time !== '') {
-              timesArray.push(item.Time); // Add only if the time is not already in the timesArray
+            const t = item.Time ?? item.time;
+            if (t && !timesArray.includes(t)) {
+              timesArray.push(t); // Add only if the time is not already in the timesArray
             }
             this.timeDataSource = timesArray;
+            console.log("timesArray: ", timesArray);
             return timesArray;
           }, [])
           //assures times are in a chronological order AM to PM, converts to 24 hrs, then back

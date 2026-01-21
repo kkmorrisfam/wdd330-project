@@ -7,7 +7,7 @@ export function addHeaderFooter() {
 
     const footerHTML = `
     <footer>
-        <p>&copy; 2024 | Kerri Morris | Abacus Law Calendar App</p>
+        <p>&copy; 2024, 2026 | Kerri Morris | Abacus Law Calendar App</p>
     </footer>`;
 
     // Insert the header at the beginning of the body
