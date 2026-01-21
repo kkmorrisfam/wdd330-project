@@ -19,7 +19,7 @@ export default class Column {
               timesArray.push(t); // Add only if the time is not already in the timesArray
             }
             this.timeDataSource = timesArray;
-            console.log("timesArray: ", timesArray);
+            // console.log("timesArray: ", timesArray);
             return timesArray;
           }, [])
           //assures times are in a chronological order AM to PM, converts to 24 hrs, then back
@@ -75,7 +75,7 @@ export default class Column {
     }
         
     clientListByTimeTemplate(data) {
-        console.log('clientListByTimeTemplate - data: ', data);
+        // console.log('clientListByTimeTemplate - data: ', data);
         const uniqueClients = Array.from(new Set(data.map(client => client['Linked Name'])));
         // console.log('uniqueClients: ', uniqueClients);
         return `

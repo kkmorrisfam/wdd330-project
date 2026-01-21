@@ -12,6 +12,24 @@ This project demonstrates data fetching, transformation, and dynamic UI renderin
 
 ---
 
+## Using the Live Demo
+
+This application is driven entirely by calendar data.  
+Only dates that have associated events will display times and details.
+
+To see the full functionality:
+
+- Select a date that contains calendar items
+- Then click on a time to view clients and matters
+
+### Suggested Dates to Try
+
+- **January 14, 2026**
+- **February 19, 2026**
+- **April 9, 2026**
+
+---
+
 ## Demo
 
 ### Date → Time List

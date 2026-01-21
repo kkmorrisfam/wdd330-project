@@ -20,11 +20,35 @@ async function convertToJson(res) {
   }
 
 
-//normalize date
+//normalize date to MM/DD/YYYY
 const padMMDDYYYY = (dateStr) => {
-  const [m, d, y] = dateStr.split("/");
-  return `${String(Number(m)).padStart(2,"0")}/${String(Number(d)).padStart(2, "0")}/${y}`;
+  if (!dateStr || typeof dateStr !== "string") return null;
+
+  const parts = dateStr.split("/");
+  if (parts.length !== 3) return null;
+
+  const [monthRaw, dayRaw, yearRaw] = parts;
+
+  const mm = String(parseInt(monthRaw, 10)).padStart(2, "0");
+  const dd = String(parseInt(dayRaw, 10)).padStart(2, "0");
+  let yyyy = String(parseInt(yearRaw, 10));
+
+  // add 20 to year if only two numbers (2/9/26 -> 02/09/2026)
+  if (yyyy.length === 2) {
+    yyyy = `20${yyyy}`;
+  }
+
+  if (!yyyy || yyyy.length !== 4) return null;
+
+  return `${mm}/${dd}/${yyyy}`;
 };
+
+const normalizeTime = (timeStr) => {
+  return String(timeStr ?? "")
+    .trim()
+    .toLocaleLowerCase()
+    .replace(/\s+/g, "");
+}
 
 export default class ExternalServices {
   //constructor
@@ -77,8 +101,8 @@ export default class ExternalServices {
         return padMMDDYYYY(item.When) === targetDate;
       });
 
-      console.log("Target date: ", targetDate);
-      console.log("Matches found: ", filteredData.length);
+      // console.log("Target date: ", targetDate);
+      // console.log("Matches found: ", filteredData.length);
      
       return filteredData;
     } catch (error) {
@@ -89,24 +113,46 @@ export default class ExternalServices {
 
   async getDataByTime(selectedDate, selectedTime = '9:00a') {
     try {
-      // console.log('inside getDataByTime', selectedDate, selectedTime);
-      // const jsonPath = `$[?(@.When == '${selectedDate}'${selectedTime ? ` && @.Time == '${selectedTime}'` : ''})]`;
-      const dateForQuery = padMMDDYYYY(convertToDateString(selectedDate));
-      const timeForQuery = (selectedTime|| "").trim();
+      // console.log('inside getDataByTime', selectedDate, selectedTime);      
+      
+      //normalize date and time
+      const normalDate = padMMDDYYYY(convertToDateString(selectedDate));
+      const normalTime = normalizeTime(selectedTime);
 
-      const jsonPath = `$[?(@.When == '${dateForQuery}' && @.Time == '${selectedTime}')]`;
+      // const jsonPath = `$[?(@.When == '${dateForQuery}' && @.Time == '${timeForQuery}')]`;
+      
       const response = await fetch(this.baseURL + `${this.binId}/latest?meta=false`, {
         method: "GET",
         headers: {
             "X-Master-Key": this.apiKey,
-            'X-JSON-Path': jsonPath
+            // 'X-JSON-Path': jsonPath
           }
         });
 
       const myData = await response.json();
-      console.log('myData in getDataByTime after response.json()', myData);      
+      // console.log('myData in getDataByTime after response.json()', myData);      
       
-      return myData;
+      // handle both array or record object of arrays
+      const records = Array.isArray(myData) ? myData : myData?.record;
+
+      if (!Array.isArray(records)) {
+        console.warn("Unexpected data type/shape: ", myData);
+        return [];
+      }
+
+      const matches = records.filter((item) => {
+        if (!item.When || !item.Time) return false;
+
+        const itemDate = padMMDDYYYY(item.When);
+        const itemTime = normalizeTime(item.Time);
+
+        return itemDate === normalDate && itemTime === normalTime;
+      })
+
+      // console.log("Normalized Date/Time: ", normalDate, normalTime);
+      // console.log("Time Matches found: ", matches.length);
+
+      return matches;
     } catch (error) {
         console.error('Error fetching or filtering data by date and time:', error);
         return [];

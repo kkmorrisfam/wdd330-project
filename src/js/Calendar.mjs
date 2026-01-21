@@ -40,7 +40,7 @@ export default class Calendar {
             year: "numeric",
         });
         
-        console.log("stringDate", stringDate);
+        // console.log("stringDate", stringDate);
         this.displayDOM.innerHTML = `${stringDate}`;
         this.days.innerHTML = ""; // Clear previous days
     
