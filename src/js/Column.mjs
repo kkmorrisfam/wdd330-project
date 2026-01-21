@@ -75,7 +75,7 @@ export default class Column {
     }
         
     clientListByTimeTemplate(data) {
-        // console.log('clientListByTimeTemplate - data: ', data);
+        console.log('clientListByTimeTemplate - data: ', data);
         const uniqueClients = Array.from(new Set(data.map(client => client['Linked Name'])));
         // console.log('uniqueClients: ', uniqueClients);
         return `
@@ -87,12 +87,14 @@ export default class Column {
     // this function lists multiple clients with different matters
     multClientListByTimeTemplate(data) {        
         // console.log('data in muliClientListByTime: ', data);
+        
         return `
         <ul class="client-list">                
              ${data.map((client, index)=> 
                 `<li class="button client-name" data-matter="${client['Case Number']}" id="matter-${index}">${client['Linked Matter']}</li>`).join('')}
 
         </ul>`;
+
     }
 
     renderColumnOne() {        

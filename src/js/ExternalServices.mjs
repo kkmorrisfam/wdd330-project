@@ -19,6 +19,13 @@ async function convertToJson(res) {
     }
   }
 
+
+//normalize date
+const padMMDDYYYY = (dateStr) => {
+  const [m, d, y] = dateStr.split("/");
+  return `${String(Number(m)).padStart(2,"0")}/${String(Number(d)).padStart(2, "0")}/${y}`;
+};
+
 export default class ExternalServices {
   //constructor
   constructor () {          
@@ -27,6 +34,7 @@ export default class ExternalServices {
     this.apiKey = apiKey;
     
   }
+
 
   //test function to get all data - this is working
   async getMyData() {
@@ -60,11 +68,6 @@ export default class ExternalServices {
       // console.log('Data for ColumnOne after response.json(): ', myData);
       const formattedDate = convertToDateString(selectedDate);
       
-      //normalize date
-      const padMMDDYYYY = (dateStr) => {
-        const [m, d, y] = dateStr.split("/");
-        return `${String(Number(m)).padStart(2,"0")}/${String(Number(d)).padStart(2, "0")}/${y}`;
-      };
 
       const targetDate = padMMDDYYYY(formattedDate);  
 
@@ -83,12 +86,15 @@ export default class ExternalServices {
     }
   }
 
-  
+
   async getDataByTime(selectedDate, selectedTime = '9:00a') {
     try {
       // console.log('inside getDataByTime', selectedDate, selectedTime);
       // const jsonPath = `$[?(@.When == '${selectedDate}'${selectedTime ? ` && @.Time == '${selectedTime}'` : ''})]`;
-      const jsonPath = `$[?(@.When == '${selectedDate}' && @.Time == '${selectedTime}')]`;
+      const dateForQuery = padMMDDYYYY(convertToDateString(selectedDate));
+      const timeForQuery = (selectedTime|| "").trim();
+
+      const jsonPath = `$[?(@.When == '${dateForQuery}' && @.Time == '${selectedTime}')]`;
       const response = await fetch(this.baseURL + `${this.binId}/latest?meta=false`, {
         method: "GET",
         headers: {
