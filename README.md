@@ -116,12 +116,12 @@ If I continue building this project, the next improvements I would implement are
 
 ### Client -> Date -> Time -> Detail
 
-![Client Date and Time Filter](docs/gifs/CalendarDemoInit.gif)
+![Client Date and Time Filter](docs/gifs/calendar-demo-2.gif)
 
 ### Toggle Client/Matter
 
-![Client Matter Toggle](docs/gifs/CalendarByMatter_1.gif)
+![Client Matter Toggle](docs/gifs/calendar-detail.gif)
 
 ### Toggle Light/Dark Mode
 
-![Light/Dark Toggle](docs/gifs/CalendarLightDark.gif)
+![Light/Dark Toggle](docs/gifs/calendar-dark-mode.gif)
